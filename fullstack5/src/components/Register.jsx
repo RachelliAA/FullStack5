@@ -2,6 +2,9 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+import { MdPerson, MdLock } from 'react-icons/md';
+import classes from './login.module.css';
+
 function Register() {
 
     // State hooks
@@ -40,36 +43,58 @@ function Register() {
     };
 
     return (
-        <form onSubmit={handleRegister}>
-            <h2>Register</h2>
+        <div className={classes.container}>
+            <div className={classes.header}>
+                <div className={classes.text}>Register</div>
+                <div className={classes.underLine}></div>
+            </div>
 
-            <input
-                type="text"
-                placeholder="Username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-            />
+            <form className={classes.inputs} onSubmit={handleRegister}>
+                <div className={classes.input}>
+                    <MdPerson className={classes.icon} />
+                    <input
+                        type="text"
+                        placeholder="Username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        required
+                    />
+                </div>
 
-            <input
-                type="password"
-                placeholder="Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-            />
+                <div className={classes.input}>
+                    <MdLock className={classes.icon} />
+                    <input
+                        type="password"
+                        placeholder="Password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
+                </div>
 
-            <input
-                type="password"
-                placeholder="Verify Password"
-                value={verifyPassword}
-                onChange={(e) => setVerifyPassword(e.target.value)}
-                required
-            />
+                <div className={classes.input}>
+                    <MdLock className={classes.icon} />
+                    <input
+                        type="password"
+                        placeholder="Verify Password"
+                        value={verifyPassword}
+                        onChange={(e) => setVerifyPassword(e.target.value)}
+                        required
+                    />
+                </div>
 
-            <button type="submit">Continue</button>
-            {error && <p>{error}</p>}
-        </form>
+                <button type="submit" className={classes.submit}>Register Details</button>
+
+                {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
+            </form>
+
+            <div className={classes.link}>
+                Don't have an account?&nbsp;
+                <span onClick={() => navigate('/login')} style={{ cursor: 'pointer', color: '#34036c', fontWeight: 'bold' }}>
+                    Login here
+                </span>
+            </div>
+        </div>
     );
 }
 

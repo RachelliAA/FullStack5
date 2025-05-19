@@ -1,0 +1,133 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    background-color: #f4edfc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    width: 600px;
+    background-color: #fff;
+    padding-bottom: 30px;
+    border-radius: 6px;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    margin-top: 30px;
+}
+
+.text {
+    color: #34036c;
+    font-size: 45px;
+    font-weight: bold;
+}
+
+.underLine {
+    width: 65px;
+    height: 6px;
+    background: #34036c;
+    border-radius: 9px;
+}
+
+.inputs {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.input {
+    display: flex;
+    align-items: center;
+    margin: auto;
+    width: 480px;
+    height: 70px;
+    background: #eaeaea;
+    border-radius: 6px;
+    padding: 0 15px;
+}
+
+.input .icon {
+    margin-right: 15px;
+    font-size: 20px;
+    color: gray;
+}
+
+.input input {
+    flex: 1;
+    height: 50px;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: gray;
+    font-size: 18px;
+}
+
+.submit {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: auto;
+    width: 220px;
+    height: 55px;
+    background: #34036c;
+    color: white;
+    border-radius: 9px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: background 0.3s;
+}
+
+.submit:hover {
+    background: #4d0d91;
+}
+
+.link {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    color: gray;
+    font-size: 14px;
+}
+
+.link a {
+    color: #34036c;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.link a:hover {
+    text-decoration: underline;
+}
+
+
+
+.sectionTitle {
+    color: #34036c;
+    font-size: 25px;
+    font-weight: bold;
+    margin-bottom: 0;
+    margin-right: 10px;
+}
+
+.addressGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
