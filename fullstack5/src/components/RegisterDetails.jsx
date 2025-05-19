@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
-import classes from './registerDetails.module.css';
+import classes from './RegisterDetails.module.css';
 
 function RegisterDetails() {
 
@@ -95,7 +95,11 @@ function RegisterDetails() {
 
 
         <form onSubmit={handleSubmit} className={classes.container}>
-            <div className={classes.text}>Complete Your Profile</div>
+            <div className={classes.header}>
+                <div className={classes.text}>Complete Your Profile</div>
+                <div className={classes.underLine}></div>
+            </div>
+
 
             <div className={classes.sectionTitle}>Basic Information</div>
             <div className={classes.grid}>
