@@ -6,6 +6,7 @@ import RegisterDetails from './components/RegisterDetails';
 import Home from './components/Home';
 import Todos from "./components/ToDos";
 import Posts from "./components/Posts";
+import Albums from './components/Albums';
 
 function App() {
   return (
@@ -16,6 +17,9 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/register-details" element={<RegisterDetails />} /> 
         <Route path="/home" element={<Home />} />
+        <Route path="/home/todos" element={<Todos />} />
+        <Route path="/home/posts" element={<Posts />} />
+        <Route path="/home/albums" element={<Albums />} />
       </Routes>
     </Router>
   )
@@ -28,6 +32,6 @@ export default App;
 
 
 //HOW TO RUN:
-//npx json-server --watch db.json --port 3001
+//npx json-server --watch db.json --port 3000
 //C:\Users\rache\Desktop\FullStack\unit5\fullstack5>npm run dev
 

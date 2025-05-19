@@ -41,31 +41,40 @@ function RegisterDetails() {
 
         if (!baseUser) return;
 
-        // Combine baseUser with all the extra fields
-        const newUser = {
-            ...baseUser,
-            name,
-            email,
-            address: {
-                street,
-                suite,
-                city,
-                zipcode,
-                geo: {
-                    lat,
-                    lng
-                }
-            },
-            phone,
-            website,
-            company: {
-                name: companyName,
-                catchPhrase,
-                bs
-            }
-        };
-
         try {
+            // Fetch existing users
+            const response = await axios.get('http://localhost:3000/users');
+            const users = response.data;
+
+            // Calculate next ID
+            const maxId = users.reduce((max, user) => Math.max(max, user.id || 0), 0);
+            const nextId = maxId + 1;
+
+            // Combine baseUser with all the extra fields and assign ID
+            const newUser = {
+                id: nextId,
+                ...baseUser,
+                name,
+                email,
+                address: {
+                    street,
+                    suite,
+                    city,
+                    zipcode,
+                    geo: {
+                        lat,
+                        lng
+                    }
+                },
+                phone,
+                website,
+                company: {
+                    name: companyName,
+                    catchPhrase,
+                    bs
+                }
+            };
+
             // Post the new user
             await axios.post('http://localhost:3000/users', newUser);
 
@@ -74,8 +83,10 @@ function RegisterDetails() {
             localStorage.setItem('loggedInUser', JSON.stringify(newUser));
 
             navigate('/home');
+
         } catch (err) {
             alert('Failed to register user');
+            console.error(err);
         }
     };
 
