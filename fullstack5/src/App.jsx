@@ -39,13 +39,18 @@
 import Todos from "./components/ToDos";
 
 import Posts from "./components/Posts";
+import Albums from "./components/Albums";
+
 function App() {
   return (
     <div>
       {/* <h1>TODO Manager</h1>
-      <Todos /> */}
+      <Todos /> 
       <h1>Todo & Post App</h1>
       <Posts />
+      */}
+      <h1>My App</h1>
+      <Albums />
     </div>
   );
 }
