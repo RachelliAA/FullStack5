@@ -158,3 +158,9 @@ export default function Albums() {
     </div>
   );
 }
+
+function Albums() {
+
+}
+
+export default Albums;

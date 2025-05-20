@@ -1,0 +1,73 @@
+body {
+    font-family: sans-serif;
+    margin: 0;
+    min-height: 100vh;
+    background-color: #f4edfc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+
+
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 9px;
+    width: 100%;
+    margin-top: 30px;
+}
+
+.text {
+    color: #34036c;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+.underLine {
+    width: 65px;
+    height: 6px;
+    background: #34036c;
+    border-radius: 9px;
+}
+
+.nav {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin: 30px 20px 20px;
+    gap: 10px;
+}
+
+.navButton {
+    background: #34036c;
+    color: white;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 9px;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.navButton:hover {
+    background: #4d0d91;
+}
+
+.infoCard {
+    background: #eaeaea;
+    padding: 20px;
+    margin: 0 20px;
+    border-radius: 6px;
+    color: #333;
+    font-size: 15px;
+    line-height: 1.5;
+}
+
+.error {
+    color: red;
+    text-align: center;
+    margin-bottom: 15px;
+}

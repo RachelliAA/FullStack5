@@ -1,58 +1,30 @@
-// import { useState } from 'react'
-// import reactLogo from './assets/react.svg'
-// import viteLogo from '/vite.svg'
-// import './App.css'
 
-// function App() {
-//   const [count, setCount] = useState(0)
-
-//   return (
-//     <>
-//       <div>
-//         <a href="https://vite.dev" target="_blank">
-//           <img src={viteLogo} className="logo" alt="Vite logo" />
-//         </a>
-//         <a href="https://react.dev" target="_blank">
-//           <img src={reactLogo} className="logo react" alt="React logo" />
-//         </a>
-//       </div>
-//       <h1>Vite + React</h1>
-//       <div className="card">
-//         <button onClick={() => setCount((count) => count + 1)}>
-//           count is {count}
-//         </button>
-//         <p>
-//           Edit <code>src/App.jsx</code> and save to test HMR
-//         </p>
-//       </div>
-//       <p className="read-the-docs">
-//         Click on the Vite and React logos to learn more
-//       </p>
-//     </>
-//   )
-// }
-
-// export default App
-
-
-// src/App.jsx
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './components/Login';
+import Register from './components/Register';
+import RegisterDetails from './components/RegisterDetails';
+import Home from './components/Home';
 import Todos from "./components/ToDos";
-
 import Posts from "./components/Posts";
+import Albums from './components/Albums';
+
 import Albums from "./components/Albums";
 
 function App() {
   return (
-    <div>
-      {/* <h1>TODO Manager</h1>
-      <Todos /> 
-      <h1>Todo & Post App</h1>
-      <Posts />
-      */}
-      <h1>My App</h1>
-      <Albums />
-    </div>
-  );
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/register-details" element={<RegisterDetails />} /> 
+        <Route path="/home" element={<Home />} />
+        <Route path="/home/todos" element={<Todos />} />
+        <Route path="/home/posts" element={<Posts />} />
+        <Route path="/home/albums" element={<Albums />} />
+      </Routes>
+    </Router>
+  )
 }
 
 export default App;
@@ -62,6 +34,6 @@ export default App;
 
 
 //HOW TO RUN:
-//npx json-server --watch db.json --port 3001
+//npx json-server --watch db.json --port 3000
 //C:\Users\rache\Desktop\FullStack\unit5\fullstack5>npm run dev
 
