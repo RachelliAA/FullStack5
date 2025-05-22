@@ -70,7 +70,7 @@
       }
     },
     {
-      "id": 4,
+      "id": "4",
       "username": "Esther",
       "website": "e123456",
       "name": "Esther Nusbacher",
@@ -530,6 +530,11 @@
       "userId": 3,
       "id": "15",
       "title": "vero maxime id possimus sunt neque et consequatur"
+    },
+    {
+      "id": "afa4",
+      "title": "butterflies",
+      "userId": 4
     }
   ],
   "photos": [
@@ -1232,6 +1237,12 @@
       "title": "temporibus aut et et est dolor",
       "url": "https://via.placeholder.com/600/5f335",
       "thumbnailUrl": "https://via.placeholder.com/150/5f335"
+    },
+    {
+      "id": "426b",
+      "title": "orange butterfly",
+      "url": "https://i.natgeofe.com/k/9acd2bad-fb0e-43a8-935d-ec0aefc60c2f/monarch-butterfly-grass_3x2.jpg",
+      "albumId": "afa4"
     }
   ],
   "posts": [

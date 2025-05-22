@@ -18,9 +18,11 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/register-details" element={<RegisterDetails />} /> 
         <Route path="/home" element={<Home />} />
-        <Route path="/home/todos" element={<Todos />} />
-        <Route path="/home/posts" element={<Posts />} />
-        <Route path="/home/albums" element={<Albums />} />
+        <Route path="/home/:id/todos" element={<Todos />} />
+        <Route path="/home/:id/posts" element={<Posts />} />
+        <Route path="/home/:id/albums" element={<Albums />} />
+
+
       </Routes>
     </Router>
   )
