@@ -1,12 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-
 import classes from './RegisterDetails.module.css';
 
 function RegisterDetails() {
-
-    // State hooks
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [street, setStreet] = useState('');
@@ -22,35 +18,29 @@ function RegisterDetails() {
     const [bs, setBs] = useState('');
 
     const navigate = useNavigate();
-    const [baseUser, setBaseUser] = useState(null); // holds the partial user (username and password) from registor
+    const [baseUser, setBaseUser] = useState(null);
 
-    // Load the basic user info from localStorage 
     useEffect(() => {
         const savedUser = JSON.parse(localStorage.getItem('newUser'));
         if (!savedUser) {
             alert("No base user data");
-            navigate('/register'); // redirect back to register 
+            navigate('/register');
         } else {
             setBaseUser(savedUser);
         }
     }, [navigate]);
 
-    // Called when user submits the form
     const handleSubmit = async (e) => {
         e.preventDefault();
-
         if (!baseUser) return;
 
         try {
-            // Fetch existing users
-            const response = await axios.get('http://localhost:3000/users');
-            const users = response.data;
+            const res = await fetch('http://localhost:3000/users');
+            const users = await res.json();
 
-            // Calculate next ID
             const maxId = users.reduce((max, user) => Math.max(max, user.id || 0), 0);
             const nextId = maxId + 1;
 
-            // Combine baseUser with all the extra fields and assign ID
             const newUser = {
                 id: nextId,
                 ...baseUser,
@@ -61,10 +51,7 @@ function RegisterDetails() {
                     suite,
                     city,
                     zipcode,
-                    geo: {
-                        lat,
-                        lng
-                    }
+                    geo: { lat, lng }
                 },
                 phone,
                 website,
@@ -75,13 +62,16 @@ function RegisterDetails() {
                 }
             };
 
-            // Post the new user
-            await axios.post('http://localhost:3000/users', newUser);
+            const postRes = await fetch('http://localhost:3000/users', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(newUser)
+            });
 
-            // Save user to localStorage as logged in
-            localStorage.removeItem('newUser'); // remove temporary data
+            if (!postRes.ok) throw new Error('Failed to register user');
+
+            localStorage.removeItem('newUser');
             localStorage.setItem('loggedInUser', JSON.stringify(newUser));
-
             navigate('/home');
 
         } catch (err) {
@@ -90,16 +80,12 @@ function RegisterDetails() {
         }
     };
 
-    // Form for entering detailed user information
     return (
-
-
         <form onSubmit={handleSubmit} className={classes.container}>
             <div className={classes.header}>
                 <div className={classes.text}>Complete Your Profile</div>
                 <div className={classes.underLine}></div>
             </div>
-
 
             <div className={classes.sectionTitle}>Basic Information</div>
             <div className={classes.grid}>
@@ -160,7 +146,6 @@ function RegisterDetails() {
                 <button type="submit">Finish Registration</button>
             </div>
         </form>
-
     );
 }
 

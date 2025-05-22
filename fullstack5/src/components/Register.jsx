@@ -1,13 +1,10 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 import { MdPerson, MdLock } from 'react-icons/md';
 import classes from './login.module.css';
 
 function Register() {
-
-    // State hooks
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [verifyPassword, setVerifyPassword] = useState('');
@@ -18,7 +15,6 @@ function Register() {
     const handleRegister = async (e) => {
         e.preventDefault();
 
-        // Check password match
         if (password !== verifyPassword) {
             setError("Passwords do not match");
             return;
@@ -26,17 +22,19 @@ function Register() {
 
         try {
             // Check if username already exists
-            const res = await axios.get(`http://localhost:3000/users?username=${username}`);
-            if (res.data.length > 0) {
+            const response = await fetch(`http://localhost:3000/users?username=${username}`);
+            const data = await response.json();
+
+            if (data.length > 0) {
                 setError("Username already exists");
                 return;
             }
 
-            // Store username & password in localStorage
+            // Save temporarily to localStorage (will complete on next form)
             localStorage.setItem('newUser', JSON.stringify({ username, website: password }));
-            // Navigate to additional details form
-            navigate('/register-details');
 
+            // Navigate to additional registration step
+            navigate('/register-details');
         } catch (err) {
             setError("Server error");
         }
@@ -89,7 +87,7 @@ function Register() {
             </form>
 
             <div className={classes.link}>
-                Don't have an account?&nbsp;
+                Already have an account?&nbsp;
                 <span onClick={() => navigate('/login')} style={{ cursor: 'pointer', color: '#34036c', fontWeight: 'bold' }}>
                     Login here
                 </span>
@@ -97,6 +95,5 @@ function Register() {
         </div>
     );
 }
-
 
 export default Register;

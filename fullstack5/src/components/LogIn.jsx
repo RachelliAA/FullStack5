@@ -1,11 +1,8 @@
-
 import { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 import { MdPerson, MdLock } from 'react-icons/md';
 import classes from './Login.module.css';
-
 
 function Login() {
 
@@ -20,16 +17,19 @@ function Login() {
         e.preventDefault();
 
         try {
-            // GET request to find the user 
-            const res = await axios.get(`http://localhost:3000/users?username=${username}`);
-            const user = res.data[0];
+            // GET request to find the user using fetch
+            const response = await fetch(`http://localhost:3000/users?username=${username}`);
+            if (!response.ok) throw new Error("Failed to fetch");
+
+            const data = await response.json();
+            const user = data[0];
 
             if (user && user.website === password) {
                 localStorage.setItem('loggedInUser', JSON.stringify(user));
                 // Redirect to the home page
                 navigate('/home');
             } else {
-                setError("Incorrect username or password")
+                setError("Incorrect username or password");
             }
 
         } catch (err) {
@@ -46,7 +46,6 @@ function Login() {
                 </div>
 
                 <form onSubmit={handleLogin} className={classes.inputs}>
-                    {/* Username input */}
                     <div className={classes.input}>
                         <MdPerson className={classes.icon} />
                         <input
@@ -57,7 +56,6 @@ function Login() {
                         />
                     </div>
 
-                    {/* Password input */}
                     <div className={classes.input}>
                         <MdLock className={classes.icon} />
                         <input
@@ -67,9 +65,10 @@ function Login() {
                             onChange={(e) => setPassword(e.target.value)}
                         />
                     </div>
+
                     {error && <p style={{ color: 'red', textAlign: 'center' }}>{error}</p>}
 
-                    <button type="submit" className={classes.submit} >Login</button>
+                    <button type="submit" className={classes.submit}>Login</button>
                 </form>
 
                 <div className={classes.link}>
