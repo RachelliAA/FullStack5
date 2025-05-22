@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 const activeUserId = 1;
 
-export default function Albums() {
+function Albums() {
   const [albums, setAlbums] = useState([]);
   const [search, setSearch] = useState("");
   const [searchField, setSearchField] = useState("title");
@@ -17,20 +17,20 @@ export default function Albums() {
   }, []);
 
   const fetchAlbums = async () => {
-    const res = await fetch(`http://localhost:3001/albums`);
+    const res = await fetch(`http://localhost:3000/albums`);
     const data = await res.json();
     setAlbums(data.filter(album => album.userId === activeUserId));
   };
 
   const fetchPhotos = async (albumId) => {
-    const res = await fetch(`http://localhost:3001/photos?albumId=${albumId}`);
+    const res = await fetch(`http://localhost:3000/photos?albumId=${albumId}`);
     const data = await res.json();
     setPhotos(data);
     setVisiblePhotos(6);
   };
 
   const handleSearch = () => {
-    fetch(`http://localhost:3001/albums`)
+    fetch(`http://localhost:3000/albums`)
       .then(res => res.json())
       .then(data => {
         const userAlbums = data.filter(album => album.userId === activeUserId);
@@ -46,7 +46,7 @@ export default function Albums() {
 
   const handleAddAlbum = async () => {
     if (!newAlbumTitle.trim()) return;
-    await fetch(`http://localhost:3001/albums`, {
+    await fetch(`http://localhost:3000/albums`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ title: newAlbumTitle, userId: activeUserId }),
@@ -56,7 +56,7 @@ export default function Albums() {
   };
 
   const handleDeleteAlbum = async (albumId) => {
-    await fetch(`http://localhost:3001/albums/${albumId}`, {
+    await fetch(`http://localhost:3000/albums/${albumId}`, {
       method: "DELETE",
     });
     setSelectedAlbum(null);
@@ -65,7 +65,7 @@ export default function Albums() {
 
   const handleAddPhoto = async () => {
     if (!newPhoto.title || !newPhoto.url) return;
-    await fetch(`http://localhost:3001/photos`, {
+    await fetch(`http://localhost:3000/photos`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -78,7 +78,7 @@ export default function Albums() {
   };
 
   const handleDeletePhoto = async (photoId) => {
-    await fetch(`http://localhost:3001/photos/${photoId}`, {
+    await fetch(`http://localhost:3000/photos/${photoId}`, {
       method: "DELETE",
     });
     fetchPhotos(selectedAlbum.id);
@@ -159,8 +159,6 @@ export default function Albums() {
   );
 }
 
-function Albums() {
 
-}
 
 export default Albums;

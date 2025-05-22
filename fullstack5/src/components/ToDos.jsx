@@ -8,7 +8,7 @@ export default function Todos() {
   const [searchField, setSearchField] = useState("title");
 
   const fetchTodos = async () => {
-    const res = await fetch("http://localhost:3001/todos");
+    const res = await fetch("http://localhost:3000/todos");
     const data = await res.json();
     setTodos(data);
     setFilteredTodos(data);
@@ -42,7 +42,7 @@ export default function Todos() {
   const handleToggle = async (id) => {
     const todo = todos.find(t => t.id === id);
     const updated = { ...todo, completed: !todo.completed };
-    await fetch(`http://localhost:3001/todos/${id}`, {
+    await fetch(`http://localhost:3000/todos/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updated),
@@ -51,7 +51,7 @@ export default function Todos() {
   };
 
   const handleDelete = async (id) => {
-    await fetch(`http://localhost:3001/todos/${id}`, {
+    await fetch(`http://localhost:3000/todos/${id}`, {
       method: "DELETE",
     });
     fetchTodos();
@@ -63,7 +63,7 @@ export default function Todos() {
       completed: false,
       userId: 1,
     };
-    await fetch("http://localhost:3001/todos", {
+    await fetch("http://localhost:3000/todos", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newTodo),
@@ -74,7 +74,7 @@ export default function Todos() {
   const handleUpdateTitle = async (id, title) => {
     const todo = todos.find(t => t.id === id);
     const updated = { ...todo, title };
-    await fetch(`http://localhost:3001/todos/${id}`, {
+    await fetch(`http://localhost:3000/todos/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updated),

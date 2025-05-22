@@ -8,7 +8,6 @@ import Todos from "./components/ToDos";
 import Posts from "./components/Posts";
 import Albums from './components/Albums';
 
-import Albums from "./components/Albums";
 
 function App() {
   return (

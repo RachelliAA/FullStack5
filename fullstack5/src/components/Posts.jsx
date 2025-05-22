@@ -12,20 +12,20 @@ export default function Posts() {
   const [newComment, setNewComment] = useState("");
 
   const fetchPosts = async () => {
-    const res = await fetch(`http://localhost:3001/posts`);
+    const res = await fetch(`http://localhost:3000/posts`);
     const data = await res.json();
     const userPosts = data.filter(post => post.userId === activeUserId);
     setPosts(userPosts);
   };
 
   const fetchComments = async (postId) => {
-    const res = await fetch(`http://localhost:3001/comments?postId=${postId}`);
+    const res = await fetch(`http://localhost:3000/comments?postId=${postId}`);
     const data = await res.json();
     setComments(data);
   };
 
   const handleSearch = () => {
-    fetch(`http://localhost:3001/posts`)
+    fetch(`http://localhost:3000/posts`)
       .then(res => res.json())
       .then(data => {
         const userPosts = data.filter(post => post.userId === activeUserId);
@@ -41,7 +41,7 @@ export default function Posts() {
 
   const handleAddPost = async () => {
     const post = { ...newPost, userId: activeUserId };
-    await fetch(`http://localhost:3001/posts`, {
+    await fetch(`http://localhost:3000/posts`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(post),
@@ -51,14 +51,14 @@ export default function Posts() {
   };
 
   const handleDeletePost = async (id) => {
-    await fetch(`http://localhost:3001/posts/${id}`, { method: "DELETE" });
+    await fetch(`http://localhost:3000/posts/${id}`, { method: "DELETE" });
     setSelectedPost(null);
     fetchPosts();
   };
 
   const handleUpdatePost = async () => {
     const updated = { ...selectedPost };
-    await fetch(`http://localhost:3001/posts/${updated.id}`, {
+    await fetch(`http://localhost:3000/posts/${updated.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updated),
@@ -74,7 +74,7 @@ export default function Posts() {
       body: newComment,
       userId: activeUserId,
     };
-    await fetch(`http://localhost:3001/comments`, {
+    await fetch(`http://localhost:3000/comments`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(comment),
@@ -85,7 +85,7 @@ export default function Posts() {
 
   const handleDeleteComment = async (comment) => {
     if (comment.userId !== activeUserId) return;
-    await fetch(`http://localhost:3001/comments/${comment.id}`, {
+    await fetch(`http://localhost:3000/comments/${comment.id}`, {
       method: "DELETE",
     });
     fetchComments(selectedPost.id);
@@ -95,7 +95,7 @@ export default function Posts() {
     const comment = comments.find(c => c.id === commentId);
     if (comment.userId !== activeUserId) return;
     const updated = { ...comment, body: newBody };
-    await fetch(`http://localhost:3001/comments/${commentId}`, {
+    await fetch(`http://localhost:3000/comments/${commentId}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updated),
