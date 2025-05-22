@@ -70,7 +70,7 @@
       }
     },
     {
-      "id": 4,
+      "id": "4",
       "username": "Esther",
       "website": "e123456",
       "name": "Esther Nusbacher",
@@ -530,6 +530,11 @@
       "userId": 3,
       "id": "15",
       "title": "vero maxime id possimus sunt neque et consequatur"
+    },
+    {
+      "id": "afa4",
+      "title": "butterflies",
+      "userId": 4
     }
   ],
   "photos": [
