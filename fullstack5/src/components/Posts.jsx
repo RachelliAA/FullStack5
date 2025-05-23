@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useParams } from "react-router-dom";
 import Comments from "./Comments";
 
-const activeUserId = 1;
-
 export default function Posts() {
+  const { id } = useParams(); // Get the user ID from the URL
+  const activeUserId = parseInt(id); // Convert to number if needed
+
   const [posts, setPosts] = useState([]);
   const [search, setSearch] = useState("");
   const [searchField, setSearchField] = useState("title");
@@ -58,7 +60,7 @@ export default function Posts() {
 
   return (
     <div>
-      <h2>Posts</h2>
+      <h2>Posts for User #{activeUserId}</h2>
       <button onClick={fetchPosts}>Load Posts</button>
 
       <div>
