@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
+import { MdRefresh, MdAdd, MdSearch, MdSort } from 'react-icons/md';
+import classes from "./ToDos.module.css";
 
 export default function Todos() {
   const [todos, setTodos] = useState([]);
   const [filteredTodos, setFilteredTodos] = useState([]);
   const [sortBy, setSortBy] = useState("id");
   const [search, setSearch] = useState("");
+  const [showSearch, setShowSearch] = useState(false);
+  const [showSort, setShowSort] = useState(false);
   const [searchField, setSearchField] = useState("title");
 
   const fetchTodos = async () => {
@@ -20,7 +24,7 @@ export default function Todos() {
 
   const handleSort = (criteria) => {
     setSortBy(criteria);
-    const sorted = [...filteredTodos].sort((a, b) => {
+    const sorted = [...filteredTodos].sort((b, a) => {
       if (criteria === "title") return a.title.localeCompare(b.title);
       if (criteria === "completed") return a.completed - b.completed;
       return a.id - b.id;
@@ -83,48 +87,111 @@ export default function Todos() {
   };
 
   return (
-    <div>
-      <h2>Todos</h2>
-      <button onClick={fetchTodos}>Load Todos</button>
-      <button onClick={handleAdd}>Add New Todo</button>
+    <div className={classes.todosContainer}>
+      <div className={classes.iconBar}>
+        <MdRefresh
+          className={classes.iconButton}
+          title="Reload"
+          onClick={fetchTodos}
+        />
+        <MdAdd
+          className={classes.iconButton}
+          title="Add New Todo"
+          onClick={handleAdd}
+        />
+        <MdSearch
+          className={classes.iconButton}
+          title="Search"
+          onClick={() => setShowSearch(!showSearch)}
+        />
+        <MdSort
+          className={classes.iconButton}
+          title="Sort"
+          onClick={() => setShowSort(prev => !prev)}
+        />
+      </div>
 
-      <div>
-        <select onChange={(e) => setSearchField(e.target.value)}>
+      {showSearch && (
+        <div className={classes.searchSortRow}>
+          <select onChange={(e) => setSearchField(e.target.value)} value={searchField}>
+            <option value="title">Title</option>
+            <option value="id">ID</option>
+            <option value="completed">Completed</option>
+          </select>
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search..."
+          />
+          <button className={classes.btn} onClick={handleSearch}>Search</button>
+        </div>
+      )}
+
+      {showSort && (
+        <div className={classes.searchSortRow}>
+          <label>Sort by:</label>
+          <select onChange={(e) => handleSort(e.target.value)} value={sortBy}>
+            <option value="id">ID</option>
+            <option value="title">Title</option>
+            <option value="completed">Completed</option>
+          </select>
+        </div>
+      )}
+
+
+      <h2 className={classes.title}>To-Do List</h2>
+
+
+      {/* <div className={classes.buttonGroup}>
+        <button className={classes.btn} onClick={fetchTodos}>Reload</button>
+        <button className={classes.btn} onClick={handleAdd}>Add New Todo</button>
+      </div> */}
+
+      {/* <div className={classes.searchSortRow}>
+        <select onChange={(e) => setSearchField(e.target.value)} value={searchField}>
           <option value="title">Title</option>
           <option value="id">ID</option>
           <option value="completed">Completed</option>
         </select>
-        <input value={search} onChange={(e) => setSearch(e.target.value)} />
-        <button onClick={handleSearch}>Search</button>
-      </div>
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search..."
+        />
+        <button className={classes.btn} onClick={handleSearch}>Search</button>
+      </div> */}
 
-      <div>
-        <label>Sort by: </label>
+      {/* <div className={classes.searchSortRow}>
+        <label>Sort by:</label>
         <select onChange={(e) => handleSort(e.target.value)} value={sortBy}>
           <option value="id">ID</option>
           <option value="title">Title</option>
           <option value="completed">Completed</option>
         </select>
-      </div>
+      </div> */}
 
       <ul>
         {filteredTodos.map(todo => (
-          <li key={todo.id}>
+          <li key={todo.id} className={classes.todoItem}>
+            <span className={classes.todoID}>ID: {todo.id}</span>
             <input
-              type="text"
-              defaultValue={todo.title}
-              onBlur={(e) => handleUpdateTitle(todo.id, e.target.value)}
-            />
-            <input
+              className={classes.checkbox}
               type="checkbox"
               checked={todo.completed}
               onChange={() => handleToggle(todo.id)}
             />
-            <span> (ID: {todo.id}) </span>
-            <button onClick={() => handleDelete(todo.id)}>Delete</button>
+            <input
+              className={`${classes.todoText} ${todo.completed ? classes.completed : ""}`}
+              type="text"
+              defaultValue={todo.title}
+              onBlur={(e) => handleUpdateTitle(todo.id, e.target.value)}
+            />
+            <button className={classes.deleteBtn} onClick={() => handleDelete(todo.id)} />
           </li>
         ))}
       </ul>
-    </div>
+    </div >
   );
 }
