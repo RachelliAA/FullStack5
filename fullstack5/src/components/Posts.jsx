@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import Comments from "./Comments";
 
 const activeUserId = 1;
 
@@ -7,9 +8,7 @@ export default function Posts() {
   const [search, setSearch] = useState("");
   const [searchField, setSearchField] = useState("title");
   const [selectedPost, setSelectedPost] = useState(null);
-  const [comments, setComments] = useState([]);
   const [newPost, setNewPost] = useState({ title: "", body: "" });
-  const [newComment, setNewComment] = useState("");
 
   const fetchPosts = async () => {
     const res = await fetch(`http://localhost:3000/posts`);
@@ -18,25 +17,17 @@ export default function Posts() {
     setPosts(userPosts);
   };
 
-  const fetchComments = async (postId) => {
-    const res = await fetch(`http://localhost:3000/comments?postId=${postId}`);
+  const handleSearch = async () => {
+    const res = await fetch(`http://localhost:3000/posts`);
     const data = await res.json();
-    setComments(data);
-  };
-
-  const handleSearch = () => {
-    fetch(`http://localhost:3000/posts`)
-      .then(res => res.json())
-      .then(data => {
-        const userPosts = data.filter(post => post.userId === activeUserId);
-        const filtered = userPosts.filter(post => {
-          const value = search.toLowerCase();
-          if (searchField === "title") return post.title.toLowerCase().includes(value);
-          if (searchField === "id") return post.id.toString() === value;
-          return true;
-        });
-        setPosts(filtered);
-      });
+    const userPosts = data.filter(post => post.userId === activeUserId);
+    const value = search.toLowerCase();
+    const filtered = userPosts.filter(post =>
+      searchField === "title"
+        ? post.title.toLowerCase().includes(value)
+        : post.id.toString() === value
+    );
+    setPosts(filtered);
   };
 
   const handleAddPost = async () => {
@@ -57,50 +48,12 @@ export default function Posts() {
   };
 
   const handleUpdatePost = async () => {
-    const updated = { ...selectedPost };
-    await fetch(`http://localhost:3000/posts/${updated.id}`, {
+    await fetch(`http://localhost:3000/posts/${selectedPost.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updated),
+      body: JSON.stringify(selectedPost),
     });
     fetchPosts();
-  };
-
-  const handleAddComment = async () => {
-    const comment = {
-      postId: selectedPost.id,
-      name: "User Comment",
-      email: "user@example.com",
-      body: newComment,
-      userId: activeUserId,
-    };
-    await fetch(`http://localhost:3000/comments`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(comment),
-    });
-    setNewComment("");
-    fetchComments(selectedPost.id);
-  };
-
-  const handleDeleteComment = async (comment) => {
-    if (comment.userId !== activeUserId) return;
-    await fetch(`http://localhost:3000/comments/${comment.id}`, {
-      method: "DELETE",
-    });
-    fetchComments(selectedPost.id);
-  };
-
-  const handleUpdateComment = async (commentId, newBody) => {
-    const comment = comments.find(c => c.id === commentId);
-    if (comment.userId !== activeUserId) return;
-    const updated = { ...comment, body: newBody };
-    await fetch(`http://localhost:3000/comments/${commentId}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(updated),
-    });
-    fetchComments(selectedPost.id);
   };
 
   return (
@@ -162,33 +115,8 @@ export default function Posts() {
             }
           />
           <button onClick={handleUpdatePost}>Update Post</button>
-          <button onClick={() => fetchComments(selectedPost.id)}>Show Comments</button>
 
-          {comments.length > 0 && (
-            <div>
-              <h4>Comments</h4>
-              <ul>
-                {comments.map((comment) => (
-                  <li key={comment.id}>
-                    <textarea
-                      defaultValue={comment.body}
-                      onBlur={(e) => handleUpdateComment(comment.id, e.target.value)}
-                    />
-                    {comment.userId === activeUserId && (
-                      <button onClick={() => handleDeleteComment(comment)}>Delete</button>
-                    )}
-                  </li>
-                ))}
-              </ul>
-
-              <input
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-                placeholder="Add comment..."
-              />
-              <button onClick={handleAddComment}>Add Comment</button>
-            </div>
-          )}
+          <Comments postId={selectedPost.id} activeUserId={activeUserId} />
         </div>
       )}
     </div>

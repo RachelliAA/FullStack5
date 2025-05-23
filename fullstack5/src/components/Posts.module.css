@@ -1,0 +1,51 @@
+.container {
+  padding: 16px;
+  max-width: 600px;
+  margin: auto;
+}
+
+.heading {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.inputGroup {
+  margin: 12px 0;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.button:hover {
+  background-color: #0056b3;
+}
+
+.postList {
+  list-style: none;
+  padding: 0;
+}
+
+.postItem {
+  margin: 8px 0;
+  padding: 6px;
+  border: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.selectedPost {
+  border: 1px solid #000;
+  padding: 10px;
+  margin-top: 16px;
+  background-color: #f9f9f9;
+}

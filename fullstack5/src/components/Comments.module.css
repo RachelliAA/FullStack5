@@ -1,0 +1,57 @@
+.commentsContainer {
+  margin-top: 16px;
+  padding: 12px;
+  border-top: 1px solid #ccc;
+}
+
+.commentsHeader {
+  font-size: 18px;
+  margin-bottom: 8px;
+}
+
+.commentList {
+  list-style: none;
+  padding: 0;
+}
+
+.commentItem {
+  margin-bottom: 12px;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #f5f5f5;
+}
+
+.commentTextarea {
+  width: 100%;
+  resize: vertical;
+  padding: 6px;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.commentControls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.commentInput {
+  width: 80%;
+  padding: 6px;
+  margin-top: 8px;
+}
+
+.commentButton {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  margin-left: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.commentButton:hover {
+  background-color: #218838;
+}
