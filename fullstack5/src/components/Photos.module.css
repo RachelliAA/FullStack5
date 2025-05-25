@@ -72,7 +72,7 @@ h3 {
 
 .photoCard button {
   margin-top: 6px;
-  background-color: #e74c3c;
+  background-color: #34036c;
   color: white;
   border: none;
   padding: 6px 10px;
@@ -82,7 +82,7 @@ h3 {
 }
 
 .photoCard button:hover {
-  background-color: #c0392b;
+  background-color: #34036c;
 }
 
 .loadMoreButton {

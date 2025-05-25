@@ -2,19 +2,17 @@
 import { useEffect, useState } from "react";
 import Photos from "./Photos";
 import classes from './Albums.module.css';
-//const activeUserId = 1;
-import { useParams } from 'react-router-dom';
-
+import { useParams, useNavigate } from "react-router-dom";
 
 
 function Albums() {
   const [albums, setAlbums] = useState([]);
   const [search, setSearch] = useState("");
   const [searchField, setSearchField] = useState("title");
-  const [selectedAlbum, setSelectedAlbum] = useState(null);
   const [newAlbumTitle, setNewAlbumTitle] = useState("");
-  const { id } = useParams();
-  const activeUserId = parseInt(id);
+  const { userId, albumId } = useParams();
+  const activeUserId = parseInt(userId);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchAlbums();
@@ -73,13 +71,6 @@ function Albums() {
   return (
     <div className={classes.container}>
       <h2>Albums</h2>
-
-      {selectedAlbum ? (
-        <Photos
-          album={selectedAlbum}
-          onBack={() => setSelectedAlbum(null)}
-        />
-      ) : (
         <>
           <div className={classes.albumControls}>
             <input
@@ -107,13 +98,12 @@ function Albums() {
             {albums.map((album) => (
               <li className={classes.albumItem} key={album.id}>
                 <strong>{album.id}:</strong> {album.title}
-                <button onClick={() => setSelectedAlbum(album)}>View Photos</button>
+                <button onClick={() => navigate(`/users/${userId}/albums/${album.id}/photos`)}>View Photos</button>
                 <button onClick={() => handleDeleteAlbum(album.id)}>Delete</button>
               </li>
             ))}
           </ul>
         </>
-      )}
     </div>
   );
 }

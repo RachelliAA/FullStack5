@@ -7,6 +7,8 @@ import Home from './components/Home';
 import Todos from "./components/ToDos";
 import Posts from "./components/Posts";
 import Albums from './components/Albums';
+import Comments from './components/Comments';
+import Photos from './components/Photos';
 
 
 function App() {
@@ -17,10 +19,12 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/register-details" element={<RegisterDetails />} /> 
-        <Route path="/users/:id/home" element={<Home />} />
-        <Route path="/users/:id/todos" element={<Todos />} />
-        <Route path="/users/:id/posts" element={<Posts />} />
-        <Route path="/users/:id/albums" element={<Albums />} />
+        <Route path="/users/:userId/home" element={<Home />} />
+        <Route path="/users/:userId/todos" element={<Todos />} />
+        <Route path="/users/:userId/posts" element={<Posts />} />
+        <Route path="/users/:userId/posts/:postId/comments" element={<Comments />} />
+        <Route path="/users/:userId/albums" element={<Albums />} />
+        <Route path="/users/:userId/albums/:albumId/photos" element={<Photos />} />
       </Routes>
     </Router>
   )
