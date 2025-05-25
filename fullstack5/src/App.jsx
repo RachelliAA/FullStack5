@@ -37,6 +37,6 @@ export default App;
 
 
 //HOW TO RUN:
-//npx json-server --watch db.json --port 3000
-//C:\Users\rache\Desktop\FullStack\unit5\fullstack5>npm run dev
+//npm run json:server
+//npm run dev
 
