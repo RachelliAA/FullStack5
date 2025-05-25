@@ -1,7 +1,7 @@
 // Albums.jsx
 import { useEffect, useState } from "react";
 import Photos from "./Photos";
-
+import classes from './Albums.module.css';
 //const activeUserId = 1;
 import { useParams } from 'react-router-dom';
 
@@ -43,13 +43,23 @@ function Albums() {
 
   const handleAddAlbum = async () => {
     if (!newAlbumTitle.trim()) return;
-    await fetch(`http://localhost:3000/albums`, {
+
+    const response = await fetch(`http://localhost:3000/albums`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title: newAlbumTitle, userId: activeUserId }),
+      body: JSON.stringify({ 
+        userId: activeUserId,
+        title: newAlbumTitle        
+      }),
     });
+
+    if (!response.ok) {
+      console.error("Failed to add album");
+      return;
+    }
+
     setNewAlbumTitle("");
-    fetchAlbums();
+    fetchAlbums(); // Reloads with new, clean album data
   };
 
   const handleDeleteAlbum = async (albumId) => {
@@ -61,7 +71,7 @@ function Albums() {
   };
 
   return (
-    <div>
+    <div className={classes.container}>
       <h2>Albums</h2>
 
       {selectedAlbum ? (
@@ -71,7 +81,7 @@ function Albums() {
         />
       ) : (
         <>
-          <div>
+          <div className={classes.albumControls}>
             <input
               placeholder="New album title"
               value={newAlbumTitle}
@@ -93,9 +103,9 @@ function Albums() {
             <button onClick={handleSearch}>Search</button>
           </div>
 
-          <ul>
+          <ul className={classes.albumList}>
             {albums.map((album) => (
-              <li key={album.id}>
+              <li className={classes.albumItem} key={album.id}>
                 <strong>{album.id}:</strong> {album.title}
                 <button onClick={() => setSelectedAlbum(album)}>View Photos</button>
                 <button onClick={() => handleDeleteAlbum(album.id)}>Delete</button>

@@ -27,7 +27,7 @@ function Login() {
             if (user && user.website === password) {
                 localStorage.setItem('loggedInUser', JSON.stringify(user));
                 // Redirect to the home page
-                navigate('/home');
+                navigate(`/users/${user.id}/home`);
             } else {
                 setError("Incorrect username or password");
             }

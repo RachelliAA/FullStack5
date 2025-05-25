@@ -17,12 +17,10 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/register-details" element={<RegisterDetails />} /> 
-        <Route path="/home" element={<Home />} />
+        <Route path="/users/:id/home" element={<Home />} />
         <Route path="/users/:id/todos" element={<Todos />} />
         <Route path="/users/:id/posts" element={<Posts />} />
         <Route path="/users/:id/albums" element={<Albums />} />
-
-
       </Routes>
     </Router>
   )

@@ -1,0 +1,102 @@
+.photosContainer {
+  background-color: #fff;
+  padding: 30px 40px;
+  border-radius: 8px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  width: 700px;
+  margin: auto;
+  text-align: left;
+}
+
+h3 {
+  color: #34036c;
+  font-size: 28px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.photoControls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.photoControls input {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  flex: 1;
+}
+
+.photoControls button {
+  background-color: #34036c;
+  color: white;
+  border: none;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.photoControls button:hover {
+  background-color: #4a2396;
+}
+
+.photoGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.photoCard {
+  width: 150px;
+  text-align: center;
+}
+
+.photoCard img {
+  width: 100%;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.photoCard p {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #333;
+}
+
+.photoCard button {
+  margin-top: 6px;
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  font-size: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.photoCard button:hover {
+  background-color: #c0392b;
+}
+
+.loadMoreButton {
+  display: block;
+  margin: 20px auto 0;
+  padding: 10px 20px;
+  background-color: #34036c;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.loadMoreButton:hover {
+  background-color: #4a2396;
+}

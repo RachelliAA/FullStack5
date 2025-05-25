@@ -34,7 +34,8 @@ function Home() {
             setError('Invalid user ID. Cannot navigate.');
             return;
         }
-        navigate(`/home/${user.id}/${section}`);
+        navigate(`/users/${user.id}/${section}`);
+
     };
 
     return (

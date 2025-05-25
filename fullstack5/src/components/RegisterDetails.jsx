@@ -72,7 +72,7 @@ function RegisterDetails() {
 
             localStorage.removeItem('newUser');
             localStorage.setItem('loggedInUser', JSON.stringify(newUser));
-            navigate('/home');
+            navigate(`/users/${newUser.id}/home`);
 
         } catch (err) {
             alert('Failed to register user');
