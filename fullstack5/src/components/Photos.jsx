@@ -1,16 +1,20 @@
-// Photos.jsx
 import { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import classes from "./Photos.module.css";
 
-function Photos({ album, onBack }) {
+function Photos() {
   const [photos, setPhotos] = useState([]);
   const [visiblePhotos, setVisiblePhotos] = useState(6);
   const [newPhoto, setNewPhoto] = useState({ title: "", url: "" });
 
+  const { albumId, userId } = useParams();
+  const navigate = useNavigate();
+
   useEffect(() => {
-    if (album?.id) {
-      fetchPhotos(album.id);
+    if (albumId) {
+      fetchPhotos(albumId);
     }
-  }, [album]);
+  }, [albumId]);
 
   const fetchPhotos = async (albumId) => {
     const res = await fetch(`http://localhost:3000/photos?albumId=${albumId}`);
@@ -24,24 +28,24 @@ function Photos({ album, onBack }) {
     await fetch(`http://localhost:3000/photos`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...newPhoto, albumId: album.id }),
+      body: JSON.stringify({ ...newPhoto, albumId: parseInt(albumId) }),
     });
     setNewPhoto({ title: "", url: "" });
-    fetchPhotos(album.id);
+    fetchPhotos(albumId);
   };
 
   const handleDeletePhoto = async (photoId) => {
     await fetch(`http://localhost:3000/photos/${photoId}`, {
       method: "DELETE",
     });
-    fetchPhotos(album.id);
+    fetchPhotos(albumId);
   };
 
   return (
-    <div>
-      <h3>{album.title} - Photos</h3>
+    <div className={classes.container}>
+      <h3>Photos for Album {albumId}</h3>
 
-      <div>
+      <div className={classes.controls}>
         <input
           placeholder="Photo title"
           value={newPhoto.title}
@@ -53,13 +57,13 @@ function Photos({ album, onBack }) {
           onChange={(e) => setNewPhoto({ ...newPhoto, url: e.target.value })}
         />
         <button onClick={handleAddPhoto}>Add Photo</button>
-        <button onClick={onBack} style={{ marginLeft: '10px' }}>Back to Albums</button>
+        <button onClick={() => navigate(`/users/${userId}/albums`)}>Back to Albums</button>
       </div>
 
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "10px", marginTop: "10px" }}>
+      <div className={classes.photoGrid}>
         {photos.slice(0, visiblePhotos).map((photo) => (
-          <div key={photo.id}>
-            <img src={photo.url} alt={photo.title} width="150" />
+          <div key={photo.id} className={classes.photoCard}>
+            <img src={photo.url} alt={photo.title} />
             <p>{photo.title}</p>
             <button onClick={() => handleDeletePhoto(photo.id)}>Delete</button>
           </div>
@@ -67,7 +71,9 @@ function Photos({ album, onBack }) {
       </div>
 
       {visiblePhotos < photos.length && (
-        <button onClick={() => setVisiblePhotos(visiblePhotos + 6)}>Load More</button>
+        <button onClick={() => setVisiblePhotos(visiblePhotos + 6)} className={classes.loadMore}>
+          Load More
+        </button>
       )}
     </div>
   );
