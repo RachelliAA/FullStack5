@@ -42,11 +42,15 @@ function Albums() {
   const handleAddAlbum = async () => {
     if (!newAlbumTitle.trim()) return;
 
+    // Determine max existing ID and increment it
+    const maxId = albums.length ? Math.max(...albums.map(album => album.id)) : 1;
+
     const response = await fetch(`http://localhost:3000/albums`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ 
         userId: activeUserId,
+        id: maxId + 1, // Assign numeric ID manually
         title: newAlbumTitle        
       }),
     });
@@ -57,7 +61,7 @@ function Albums() {
     }
 
     setNewAlbumTitle("");
-    fetchAlbums(); // Reloads with new, clean album data
+    fetchAlbums();
   };
 
   const handleDeleteAlbum = async (albumId) => {

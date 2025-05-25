@@ -22,24 +22,41 @@ function Photos() {
     setPhotos(data);
     setVisiblePhotos(6);
   };
+  const getNextId = async (resourceUrl) => {
+    const res = await fetch(resourceUrl);
+    const items = await res.json();
+
+    const maxId = items.reduce((max, item) => {
+        const numericId = parseInt(item.id);
+        return !isNaN(numericId) && numericId > max ? numericId : max;
+    }, 0);
+
+    return maxId + 1;
+    };
 
   const handleAddPhoto = async () => {
     if (!newPhoto.title || !newPhoto.url) return;
-    await fetch(`http://localhost:3000/photos`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ ...newPhoto, albumId: parseInt(albumId) }),
+
+    const nextId = await getNextId("http://localhost:3000/photos");
+
+    const photoToAdd = {
+        albumId: parseInt(albumId),
+        id: nextId,
+        title: newPhoto.title,
+        url: newPhoto.url,
+        thumbnailUrl: newPhoto.url, // or change this to a separate thumbnail URL
+    };
+
+    await fetch("http://localhost:3000/photos", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(photoToAdd),
     });
+
     setNewPhoto({ title: "", url: "" });
     fetchPhotos(albumId);
-  };
+    };
 
-  const handleDeletePhoto = async (photoId) => {
-    await fetch(`http://localhost:3000/photos/${photoId}`, {
-      method: "DELETE",
-    });
-    fetchPhotos(albumId);
-  };
 
   const handleEditPhoto = (photo) => {
     setEditPhotoId(photo.id);
