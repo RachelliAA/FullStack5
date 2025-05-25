@@ -1,102 +1,118 @@
-.photosContainer {
-  background-color: #fff;
-  padding: 30px 40px;
-  border-radius: 8px;
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
-  width: 700px;
-  margin: auto;
-  text-align: left;
+.container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 h3 {
-  color: #34036c;
-  font-size: 28px;
-  margin-bottom: 20px;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #333;
   text-align: center;
 }
 
-.photoControls {
+.controls {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin-bottom: 20px;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  justify-content: center;
 }
 
-.photoControls input {
-  padding: 10px;
+.controls input {
+  padding: 0.6rem 1rem;
   font-size: 1rem;
   border: 1px solid #ccc;
-  border-radius: 6px;
-  flex: 1;
+  border-radius: 8px;
+  width: 220px;
+  transition: border-color 0.3s ease;
 }
 
-.photoControls button {
+.controls input:focus {
+  border-color: #34036c;
+  outline: none;
+}
+
+.controls button {
   background-color: #34036c;
   color: white;
+  padding: 0.6rem 1.2rem;
   border: none;
-  padding: 10px;
-  font-size: 1rem;
-  border-radius: 6px;
+  border-radius: 8px;
   cursor: pointer;
+  font-weight: 500;
   transition: background-color 0.3s ease;
 }
 
-.photoControls button:hover {
+.controls button:hover {
   background-color: #4a2396;
 }
 
 .photoGrid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  justify-content: center;
-  margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
 }
 
 .photoCard {
-  width: 150px;
-  text-align: center;
+  background-color: #f9f9f9;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.photoCard:hover {
+  transform: translateY(-4px);
 }
 
 .photoCard img {
   width: 100%;
-  border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  height: 180px;
+  object-fit: cover;
+  border-bottom: 1px solid #eee;
 }
 
 .photoCard p {
-  margin-top: 8px;
-  font-size: 14px;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-weight: 500;
   color: #333;
+  margin: 0;
 }
 
 .photoCard button {
-  margin-top: 6px;
-  background-color: #34036c;
+  margin: 0 1rem 1rem 1rem;
+  background-color: #e74c3c;
   color: white;
   border: none;
-  padding: 6px 10px;
-  font-size: 12px;
-  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
   cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 .photoCard button:hover {
-  background-color: #34036c;
+  background-color: #c0392b;
 }
 
-.loadMoreButton {
+.loadMore {
   display: block;
-  margin: 20px auto 0;
-  padding: 10px 20px;
+  margin: 2rem auto 0 auto;
   background-color: #34036c;
   color: white;
-  border: none;
-  border-radius: 6px;
+  padding: 0.7rem 1.5rem;
   font-size: 1rem;
+  border: none;
+  border-radius: 10px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.loadMoreButton:hover {
-  background-color: #4a2396;
+.loadMore:hover {
+  background-color: #3d1966;
 }

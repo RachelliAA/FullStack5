@@ -6,14 +6,14 @@ function Photos() {
   const [photos, setPhotos] = useState([]);
   const [visiblePhotos, setVisiblePhotos] = useState(6);
   const [newPhoto, setNewPhoto] = useState({ title: "", url: "" });
+  const [editPhotoId, setEditPhotoId] = useState(null);
+  const [editPhotoData, setEditPhotoData] = useState({ title: "", url: "" });
 
   const { albumId, userId } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (albumId) {
-      fetchPhotos(albumId);
-    }
+    if (albumId) fetchPhotos(albumId);
   }, [albumId]);
 
   const fetchPhotos = async (albumId) => {
@@ -41,6 +41,21 @@ function Photos() {
     fetchPhotos(albumId);
   };
 
+  const handleEditPhoto = (photo) => {
+    setEditPhotoId(photo.id);
+    setEditPhotoData({ title: photo.title, url: photo.url });
+  };
+
+  const handleUpdatePhoto = async () => {
+    await fetch(`http://localhost:3000/photos/${editPhotoId}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(editPhotoData),
+    });
+    setEditPhotoId(null);
+    fetchPhotos(albumId);
+  };
+
   return (
     <div className={classes.container}>
       <h3>Photos for Album {albumId}</h3>
@@ -63,15 +78,42 @@ function Photos() {
       <div className={classes.photoGrid}>
         {photos.slice(0, visiblePhotos).map((photo) => (
           <div key={photo.id} className={classes.photoCard}>
-            <img src={photo.url} alt={photo.title} />
-            <p>{photo.title}</p>
-            <button onClick={() => handleDeletePhoto(photo.id)}>Delete</button>
+            {editPhotoId === photo.id ? (
+              <>
+                <input
+                  type="text"
+                  value={editPhotoData.title}
+                  onChange={(e) =>
+                    setEditPhotoData({ ...editPhotoData, title: e.target.value })
+                  }
+                />
+                <input
+                  type="text"
+                  value={editPhotoData.url}
+                  onChange={(e) =>
+                    setEditPhotoData({ ...editPhotoData, url: e.target.value })
+                  }
+                />
+                <button onClick={handleUpdatePhoto}>Save</button>
+                <button onClick={() => setEditPhotoId(null)}>Cancel</button>
+              </>
+            ) : (
+              <>
+                <img src={photo.url} alt={photo.title} />
+                <p>{photo.title}</p>
+                <button onClick={() => handleDeletePhoto(photo.id)}>Delete</button>
+                <button onClick={() => handleEditPhoto(photo)}>Edit</button>
+              </>
+            )}
           </div>
         ))}
       </div>
 
       {visiblePhotos < photos.length && (
-        <button onClick={() => setVisiblePhotos(visiblePhotos + 6)} className={classes.loadMore}>
+        <button
+          onClick={() => setVisiblePhotos(visiblePhotos + 6)}
+          className={classes.loadMore}
+        >
           Load More
         </button>
       )}
