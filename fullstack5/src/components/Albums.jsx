@@ -23,6 +23,8 @@ function Albums() {
 
   // when component mounts, load the albums
   useEffect(() => {
+    // Replace Albums in history with Home
+    window.history.replaceState(null, "", `/users/${userId}/albums`);
     fetchAlbums();
   }, []);
 
@@ -91,7 +93,7 @@ function Albums() {
     setNewAlbumTitle("");// Clear input after adding
     fetchAlbums();// Refresh the album list
   };
-  
+
   // deletes an album by its id
   const handleDeleteAlbum = async (albumId) => {
     await fetch(`http://localhost:3000/albums/${albumId}`, {

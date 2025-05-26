@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import classes from "./Photos.module.css";
 
 function Photos() {
@@ -9,8 +9,7 @@ function Photos() {
   const [editPhotoId, setEditPhotoId] = useState(null);
   const [editPhotoData, setEditPhotoData] = useState({ title: "", url: "" });
 
-  const { albumId, userId } = useParams();
-  const navigate = useNavigate();
+  const { albumId } = useParams();
 
   useEffect(() => {
     if (albumId) fetchPhotos(albumId);
@@ -22,17 +21,18 @@ function Photos() {
     setPhotos(data);
     setVisiblePhotos(6);
   };
+
   const getNextId = async (resourceUrl) => {
     const res = await fetch(resourceUrl);
     const items = await res.json();
 
     const maxId = items.reduce((max, item) => {
-        const numericId = parseInt(item.id);
-        return !isNaN(numericId) && numericId > max ? numericId : max;
+      const numericId = parseInt(item.id);
+      return !isNaN(numericId) && numericId > max ? numericId : max;
     }, 0);
 
     return maxId + 1;
-    };
+  };
 
   const handleAddPhoto = async () => {
     if (!newPhoto.title || !newPhoto.url) return;
@@ -40,30 +40,30 @@ function Photos() {
     const nextId = await getNextId("http://localhost:3000/photos");
 
     const photoToAdd = {
-        albumId: parseInt(albumId),
-        id: nextId,
-        title: newPhoto.title,
-        url: newPhoto.url,
-        thumbnailUrl: newPhoto.url, // or change this to a separate thumbnail URL
+      albumId: parseInt(albumId),
+      id: nextId,
+      title: newPhoto.title,
+      url: newPhoto.url,
+      thumbnailUrl: newPhoto.url, // optionally use a separate thumbnail
     };
 
     await fetch("http://localhost:3000/photos", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(photoToAdd),
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(photoToAdd),
     });
 
     setNewPhoto({ title: "", url: "" });
     fetchPhotos(albumId);
-    };
+  };
 
-    const handleDeletePhoto = async (photoId) => {
+  const handleDeletePhoto = async (photoId) => {
     await fetch(`http://localhost:3000/photos/${photoId}`, {
-        method: "DELETE",
+      method: "DELETE",
     });
     fetchPhotos(albumId);
-    }
-    
+  };
+
   const handleEditPhoto = (photo) => {
     setEditPhotoId(photo.id);
     setEditPhotoData({ title: photo.title, url: photo.url });
@@ -95,7 +95,6 @@ function Photos() {
           onChange={(e) => setNewPhoto({ ...newPhoto, url: e.target.value })}
         />
         <button onClick={handleAddPhoto}>Add Photo</button>
-        <button onClick={() => navigate(`/users/${userId}/albums`)}>Back to Albums</button>
       </div>
 
       <div className={classes.photoGrid}>
