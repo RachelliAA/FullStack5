@@ -91,3 +91,8 @@ h2 {
   border-radius: 6px;
   font-size: 14px;
 }
+.buttonGroup {
+  display: flex;
+  gap: 0.5rem; /* adjust spacing as needed */
+  margin-top: 0.5rem; /* optional, to space from album title */
+}

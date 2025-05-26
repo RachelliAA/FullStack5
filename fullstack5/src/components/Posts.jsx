@@ -20,43 +20,40 @@ function Posts() {
 
   useEffect(() => {
     fetchPosts();
-  }, [activeUserId, showMineOnly]);
+  }, [showMineOnly]);
 
   const fetchPosts = async () => {
     const res = await fetch(`http://localhost:3000/posts`);
     const data = await res.json();
-    const filteredPosts = showMineOnly
+    const filtered = showMineOnly
       ? data.filter((post) => post.userId === activeUserId)
       : data;
-    setPosts(filteredPosts);
+    setPosts(filtered);
   };
 
   const handleSearch = async () => {
     const res = await fetch(`http://localhost:3000/posts`);
     const data = await res.json();
     const value = search.toLowerCase();
-    const visiblePosts = showMineOnly
+    const filtered = (showMineOnly
       ? data.filter((post) => post.userId === activeUserId)
-      : data;
-    const filtered = visiblePosts.filter((post) =>
+      : data).filter((post) =>
       searchField === "title"
         ? post.title.toLowerCase().includes(value)
         : post.id.toString() === value
     );
     setPosts(filtered);
   };
-
-  const getNextPostId = async () => {
+  const getNexPostId = async () => {
     const res = await fetch(`http://localhost:3000/posts`);
     const data = await res.json();
-    const ids = data.map(post => post.id);
+    const ids = data.map((post) => post.id);
     const maxId = ids.length > 0 ? Math.max(...ids) : 0;
     return maxId + 1;
   };
-
   const handleAddPost = async () => {
     if (!newPost.title.trim()) return;
-    const nextId = await getNextPostId();
+    const nextId = await getNexPostId();
     const post = {
       userId: activeUserId,
       id: String(nextId),
@@ -78,49 +75,42 @@ function Posts() {
   };
 
   const handleDeletePost = async (id) => {
-    const post = posts.find((p) => p.id === id);
-    if (!post || post.userId !== activeUserId) return;
-
-    await fetch(`http://localhost:3000/posts/${id}`, { method: "DELETE" });
-
-    // Delete related comments
-    const res = await fetch(`http://localhost:3000/comments?postId=${id}`);
-    const comments = await res.json();
-
-    await Promise.all(
-      comments.map((comment) =>
-        fetch(`http://localhost:3000/comments/${comment.id}`, {
-          method: "DELETE",
-        })
-      )
-    );
-
+    await fetch(`http://localhost:3000/posts/${String(id)}`, { method: "DELETE" });
+    await fetch(`http://localhost:3000/comments?postId=${id}`)
+      .then((res) => res.json())
+      .then((comments) => {
+        comments.forEach((comment) => {
+          fetch(`http://localhost:3000/comments/${comment.id}`, {
+            method: "DELETE",
+          });
+        });
+      });
     setPosts((prev) => prev.filter((post) => post.id !== id));
     setSelectedPost((prev) => (prev?.id === id ? null : prev));
   };
 
   const handleUpdatePost = async () => {
     if (!selectedPost.title.trim()) return;
-
-    const response = await fetch(`http://localhost:3000/posts/${selectedPost.id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        userId: activeUserId,
-        id: selectedPost.id,
-        title: selectedPost.title,
-        body: selectedPost.body,
-      }),
-    });
+    console.log("Updating post:", selectedPost);
+    const response = await fetch(
+      `http://localhost:3000/posts/${selectedPost.id}`,
+      {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: activeUserId,
+          id: selectedPost.id,
+          title: selectedPost.title,
+          body: selectedPost.body,
+        }),
+      }
+    );
 
     if (!response.ok) return;
 
     const updatedPost = await response.json();
-
     setPosts((prevPosts) =>
-      prevPosts.map((post) =>
-        post.id === updatedPost.id ? updatedPost : post
-      )
+      prevPosts.map((post) => (post.id === updatedPost.id ? updatedPost : post))
     );
   };
 
@@ -244,8 +234,7 @@ function Posts() {
             showMineOnly={showMineOnly}
           />
         </div>
-      )
-      }
+      )}
     </div >
   );
 }
