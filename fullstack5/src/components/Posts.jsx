@@ -1,30 +1,40 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Comments from "./Comments";
+import classes from "./Posts.module.css";
 
-export default function Posts() {
-  const { id } = useParams(); // Get the user ID from the URL
-  const activeUserId = parseInt(id); // Convert to number if needed
+function Posts() {
+  const { userId } = useParams();
+  const activeUserId = parseInt(userId);
 
   const [posts, setPosts] = useState([]);
   const [search, setSearch] = useState("");
   const [searchField, setSearchField] = useState("title");
   const [selectedPost, setSelectedPost] = useState(null);
   const [newPost, setNewPost] = useState({ title: "", body: "" });
+  const [showMineOnly, setShowMineOnly] = useState(true);
+
+  useEffect(() => {
+    fetchPosts();
+  }, [activeUserId, showMineOnly]);
 
   const fetchPosts = async () => {
     const res = await fetch(`http://localhost:3000/posts`);
     const data = await res.json();
-    const userPosts = data.filter(post => post.userId === activeUserId);
-    setPosts(userPosts);
+    const filteredPosts = showMineOnly
+      ? data.filter((post) => post.userId === activeUserId)
+      : data;
+    setPosts(filteredPosts);
   };
 
   const handleSearch = async () => {
     const res = await fetch(`http://localhost:3000/posts`);
     const data = await res.json();
-    const userPosts = data.filter(post => post.userId === activeUserId);
     const value = search.toLowerCase();
-    const filtered = userPosts.filter(post =>
+    const visiblePosts = showMineOnly
+      ? data.filter((post) => post.userId === activeUserId)
+      : data;
+    const filtered = visiblePosts.filter((post) =>
       searchField === "title"
         ? post.title.toLowerCase().includes(value)
         : post.id.toString() === value
@@ -32,38 +42,95 @@ export default function Posts() {
     setPosts(filtered);
   };
 
+  const getNextPostId = async () => {
+    const res = await fetch(`http://localhost:3000/posts`);
+    const data = await res.json();
+    const ids = data.map(post => post.id);
+    const maxId = ids.length > 0 ? Math.max(...ids) : 0;
+    return maxId + 1;
+  };
+
   const handleAddPost = async () => {
-    const post = { ...newPost, userId: activeUserId };
-    await fetch(`http://localhost:3000/posts`, {
+    if (!newPost.title.trim()) return;
+    const nextId = await getNextPostId();
+    const post = {
+      userId: activeUserId,
+      id: nextId,
+      title: newPost.title,
+      body: newPost.body,
+    };
+
+    const response = await fetch(`http://localhost:3000/posts`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(post),
     });
+
+    if (!response.ok) return;
+
+    const createdPost = await response.json();
+    setPosts((prevPosts) => [...prevPosts, createdPost]);
     setNewPost({ title: "", body: "" });
-    fetchPosts();
   };
 
   const handleDeletePost = async (id) => {
+    const post = posts.find((p) => p.id === id);
+    if (!post || post.userId !== activeUserId) return;
+
     await fetch(`http://localhost:3000/posts/${id}`, { method: "DELETE" });
-    setSelectedPost(null);
-    fetchPosts();
+
+    // Delete related comments
+    const res = await fetch(`http://localhost:3000/comments?postId=${id}`);
+    const comments = await res.json();
+
+    await Promise.all(
+      comments.map((comment) =>
+        fetch(`http://localhost:3000/comments/${comment.id}`, {
+          method: "DELETE",
+        })
+      )
+    );
+
+    setPosts((prev) => prev.filter((post) => post.id !== id));
+    setSelectedPost((prev) => (prev?.id === id ? null : prev));
   };
 
   const handleUpdatePost = async () => {
-    await fetch(`http://localhost:3000/posts/${selectedPost.id}`, {
+    if (!selectedPost.title.trim()) return;
+
+    const response = await fetch(`http://localhost:3000/posts/${selectedPost.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(selectedPost),
+      body: JSON.stringify({
+        userId: activeUserId,
+        id: selectedPost.id,
+        title: selectedPost.title,
+        body: selectedPost.body,
+      }),
     });
-    fetchPosts();
+
+    if (!response.ok) return;
+
+    const updatedPost = await response.json();
+
+    setPosts((prevPosts) =>
+      prevPosts.map((post) =>
+        post.id === updatedPost.id ? updatedPost : post
+      )
+    );
   };
 
   return (
-    <div>
+    <div className={classes.container}>
       <h2>Posts for User #{activeUserId}</h2>
-      <button onClick={fetchPosts}>Load Posts</button>
 
-      <div>
+      <div className={classes.toggleRow}>
+        <button onClick={() => setShowMineOnly((prev) => !prev)}>
+          Show: {showMineOnly ? "Mine" : "Everyone's"}
+        </button>
+      </div>
+
+      <div className={classes.controls}>
         <input
           placeholder="New title"
           value={newPost.title}
@@ -77,8 +144,11 @@ export default function Posts() {
         <button onClick={handleAddPost}>Add Post</button>
       </div>
 
-      <div>
-        <select onChange={(e) => setSearchField(e.target.value)}>
+      <div className={classes.searchRow}>
+        <select
+          onChange={(e) => setSearchField(e.target.value)}
+          value={searchField}
+        >
           <option value="title">Title</option>
           <option value="id">ID</option>
         </select>
@@ -90,18 +160,22 @@ export default function Posts() {
         <button onClick={handleSearch}>Search</button>
       </div>
 
-      <ul>
+      <ul className={classes.postList}>
         {posts.map((post) => (
-          <li key={post.id}>
+          <li key={post.id} className={classes.postItem}>
             <strong>{post.id}:</strong> {post.title}
-            <button onClick={() => setSelectedPost(post)}>Select</button>
-            <button onClick={() => handleDeletePost(post.id)}>Delete</button>
+            <div>
+              <button onClick={() => setSelectedPost(post)}>Select</button>
+              {post.userId === activeUserId && (
+                <button onClick={() => handleDeletePost(post.id)}>Delete</button>
+              )}
+            </div>
           </li>
         ))}
       </ul>
 
       {selectedPost && (
-        <div style={{ border: "1px solid black", padding: "10px", marginTop: "10px" }}>
+        <div className={classes.selectedPost}>
           <h3>Selected Post</h3>
           <input
             value={selectedPost.title}
@@ -116,11 +190,19 @@ export default function Posts() {
               setSelectedPost({ ...selectedPost, body: e.target.value })
             }
           />
-          <button onClick={handleUpdatePost}>Update Post</button>
+          {selectedPost.userId === activeUserId && (
+            <button onClick={handleUpdatePost}>Update Post</button>
+          )}
 
-          <Comments postId={selectedPost.id} activeUserId={activeUserId} />
+          <Comments
+            postId={selectedPost.id}
+            activeUserId={activeUserId}
+            showMineOnly={showMineOnly}
+          />
         </div>
       )}
     </div>
   );
 }
+
+export default Posts;

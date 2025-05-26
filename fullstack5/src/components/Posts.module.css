@@ -1,51 +1,102 @@
 .container {
-  padding: 16px;
-  max-width: 600px;
+  background-color: #fff;
+  padding: 30px 40px;
+  border-radius: 8px;
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+  width: 700px;
   margin: auto;
+  text-align: left;
 }
 
-.heading {
-  font-size: 24px;
-  margin-bottom: 16px;
+h2 {
+  color: #34036c;
+  font-size: 36px;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
-.inputGroup {
-  margin: 12px 0;
+.controls {
   display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
 }
 
-.button {
-  background-color: #007bff;
+.controls input,
+.controls select,
+.controls textarea {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.controls button {
+  background-color: #34036c;
   color: white;
   border: none;
-  padding: 6px 12px;
+  padding: 10px;
+  font-size: 1rem;
+  border-radius: 6px;
   cursor: pointer;
-  border-radius: 4px;
+  transition: background-color 0.3s ease;
 }
 
-.button:hover {
-  background-color: #0056b3;
+.controls button:hover {
+  background-color: #4a2396;
+}
+
+.searchRow {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
 .postList {
   list-style: none;
   padding: 0;
+  margin-top: 20px;
 }
 
 .postItem {
-  margin: 8px 0;
-  padding: 6px;
-  border: 1px solid #ddd;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #ccc;
+}
+
+.postItem strong {
+  margin-right: 8px;
+}
+
+.postItem button {
+  margin-left: 10px;
+  background-color: #34036c;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.postItem button:hover {
+  background-color: #4a2396;
 }
 
 .selectedPost {
-  border: 1px solid #000;
-  padding: 10px;
-  margin-top: 16px;
-  background-color: #f9f9f9;
+  border: 2px solid #34036c;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 20px;
+  background-color: #f9f7fc;
+}
+
+.selectedPost h3 {
+  margin-top: 0;
+  color: #34036c;
 }
