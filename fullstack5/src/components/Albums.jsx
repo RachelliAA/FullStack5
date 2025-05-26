@@ -42,6 +42,10 @@ function Albums() {
       .then(res => res.json())
       .then(data => {
         const userAlbums = data.filter(album => album.userId === activeUserId);
+          if (!search.trim()) {
+            setAlbums(userAlbums);
+            return;
+          }
         const filtered = userAlbums.filter(album => {
           const value = search.toLowerCase();
           if (searchField === "title") return album.title.toLowerCase().includes(value);
@@ -54,19 +58,11 @@ function Albums() {
 
    // This function fetches all albums and returns the next available numeric ID
   const getNextAlbumId = async () => {
-    try {
-      const res = await fetch("http://localhost:3000/albums");
-      const allAlbums = await res.json();
-
-      const maxId = allAlbums.length
-        ? Math.max(...allAlbums.map(album => Number(album.id)))
-        : 0;
-
-      return maxId + 1;
-    } catch (err) {
-      console.error("Failed to fetch albums for ID generation:", err);
-      return null; // fallback in case of error
-    }
+    const res = await fetch(`http://localhost:3000/albums`);
+    const data = await res.json();
+    const ids = data.map((album) => album.id);
+    const maxId = ids.length > 0 ? Math.max(...ids) : 0;
+    return maxId + 1;
   };
 
   // this function adds a new album to the db
@@ -95,13 +91,33 @@ function Albums() {
     fetchAlbums();// Refresh the album list
   };
 
-  // deletes an album by its id
-  const handleDeleteAlbum = async (albumId) => {
+ const handleDeleteAlbum = async (albumId) => {
+  try {
+    // Step 1: Fetch all photos in this album
+    const res = await fetch(`http://localhost:3000/photos?albumId=${albumId}`);
+    const photos = await res.json();
+
+    // Step 2: Delete each photo
+    await Promise.all(
+      photos.map(photo =>
+        fetch(`http://localhost:3000/photos/${photo.id}`, {
+          method: "DELETE",
+        })
+      )
+    );
+
+    // Step 3: Delete the album
     await fetch(`http://localhost:3000/albums/${albumId}`, {
       method: "DELETE",
     });
+
+    // Step 4: Refresh albums list
     fetchAlbums();
-  };
+  } catch (err) {
+    console.error("Error deleting album and its photos:", err);
+  }
+};
+
 
   return (
     <div className={classes.container}>

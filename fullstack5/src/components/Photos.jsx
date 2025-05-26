@@ -27,7 +27,7 @@ function Photos() {
     const items = await res.json();
 
     const maxId = items.reduce((max, item) => {
-      const numericId = parseInt(item.id);
+      const numericId = item.id;
       return !isNaN(numericId) && numericId > max ? numericId : max;
     }, 0);
 
@@ -40,13 +40,13 @@ function Photos() {
     const nextId = await getNextId("http://localhost:3000/photos");
 
     const photoToAdd = {
-      albumId: parseInt(albumId),
+      albumId: albumId,
       id: nextId,
       title: newPhoto.title,
       url: newPhoto.url,
       thumbnailUrl: newPhoto.url, // optionally use a separate thumbnail
     };
-
+    console.log("Adding photo:", photoToAdd);
     await fetch("http://localhost:3000/photos", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
