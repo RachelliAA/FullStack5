@@ -100,3 +100,34 @@ h2 {
   margin-top: 0;
   color: #34036c;
 }
+
+.iconButton {
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: #34036c;
+}
+
+.iconBar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.actionBar {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+
+
+
+
+
+
+
+
+
