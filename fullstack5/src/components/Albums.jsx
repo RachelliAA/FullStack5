@@ -18,7 +18,8 @@ function Albums() {
 
   // grabbing userId from the URL
   const { userId } = useParams();
-  const activeUserId = parseInt(userId);// makes sure userId is a number
+  //const activeUserId = parseInt(userId);// makes sure userId is a number
+  const activeUserId = userId;
   const navigate = useNavigate();
 
   // when component mounts, load the albums
