@@ -57,7 +57,13 @@ function Photos() {
     fetchPhotos(albumId);
     };
 
-
+    const handleDeletePhoto = async (photoId) => {
+    await fetch(`http://localhost:3000/photos/${photoId}`, {
+        method: "DELETE",
+    });
+    fetchPhotos(albumId);
+    }
+    
   const handleEditPhoto = (photo) => {
     setEditPhotoId(photo.id);
     setEditPhotoData({ title: photo.title, url: photo.url });

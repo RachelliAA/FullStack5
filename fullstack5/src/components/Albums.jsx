@@ -6,24 +6,34 @@ import { useParams, useNavigate } from "react-router-dom";
 
 
 function Albums() {
+  // state to hold all albums for the current user
   const [albums, setAlbums] = useState([]);
+
+  // state for search bar input and selected field (title or id)
   const [search, setSearch] = useState("");
   const [searchField, setSearchField] = useState("title");
+
+  // input value for creating new album title
   const [newAlbumTitle, setNewAlbumTitle] = useState("");
-  const { userId, albumId } = useParams();
-  const activeUserId = parseInt(userId);
+
+  // grabbing userId from the URL
+  const { userId } = useParams();
+  const activeUserId = parseInt(userId);// makes sure userId is a number
   const navigate = useNavigate();
 
+  // when component mounts, load the albums
   useEffect(() => {
     fetchAlbums();
   }, []);
 
+  // fetch albums from the server and only show ones that match this user
   const fetchAlbums = async () => {
     const res = await fetch(`http://localhost:3000/albums`);
     const data = await res.json();
     setAlbums(data.filter(album => album.userId === activeUserId));
   };
 
+   // search logic, filters by title or id depending on the selected search field
   const handleSearch = () => {
     fetch(`http://localhost:3000/albums`)
       .then(res => res.json())
@@ -39,18 +49,36 @@ function Albums() {
       });
   };
 
-  const handleAddAlbum = async () => {
-    if (!newAlbumTitle.trim()) return;
+   // This function fetches all albums and returns the next available numeric ID
+  const getNextAlbumId = async () => {
+    try {
+      const res = await fetch("http://localhost:3000/albums");
+      const allAlbums = await res.json();
 
-    // Determine max existing ID and increment it
-    const maxId = albums.length ? Math.max(...albums.map(album => album.id)) : 1;
+      const maxId = allAlbums.length
+        ? Math.max(...allAlbums.map(album => Number(album.id)))
+        : 0;
+
+      return maxId + 1;
+    } catch (err) {
+      console.error("Failed to fetch albums for ID generation:", err);
+      return null; // fallback in case of error
+    }
+  };
+
+  // this function adds a new album to the db
+  const handleAddAlbum = async () => {
+    if (!newAlbumTitle.trim()) return;// Don't add empty albums
+
+    const newId = await getNextAlbumId();
+    if (!newId) return; // fail silently if fetching albums failed
 
     const response = await fetch(`http://localhost:3000/albums`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ 
         userId: activeUserId,
-        id: maxId + 1, // Assign numeric ID manually
+        id: newId,
         title: newAlbumTitle        
       }),
     });
@@ -60,15 +88,15 @@ function Albums() {
       return;
     }
 
-    setNewAlbumTitle("");
-    fetchAlbums();
+    setNewAlbumTitle("");// Clear input after adding
+    fetchAlbums();// Refresh the album list
   };
-
+  
+  // deletes an album by its id
   const handleDeleteAlbum = async (albumId) => {
     await fetch(`http://localhost:3000/albums/${albumId}`, {
       method: "DELETE",
     });
-    setSelectedAlbum(null);
     fetchAlbums();
   };
 
