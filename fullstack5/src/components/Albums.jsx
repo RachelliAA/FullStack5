@@ -132,8 +132,11 @@ function Albums() {
             {albums.map((album) => (
               <li className={classes.albumItem} key={album.id}>
                 <strong>{album.id}:</strong> {album.title}
-                <button onClick={() => navigate(`/users/${userId}/albums/${album.id}/photos`)}>View Photos</button>
-                <button onClick={() => handleDeleteAlbum(album.id)}>Delete</button>
+                <div className={classes.buttonGroup}>
+                  <button onClick={() => navigate(`/users/${userId}/albums/${album.id}/photos`)}>View Photos</button>
+                  <button onClick={() => handleDeleteAlbum(album.id)}>Delete</button>
+                </div>
+
               </li>
             ))}
           </ul>
