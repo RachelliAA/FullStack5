@@ -1,57 +1,70 @@
 .commentsContainer {
-  margin-top: 16px;
-  padding: 12px;
-  border-top: 1px solid #ccc;
+  margin-top: 20px;
+  padding: 20px;
+  border-top: 1px solid #ddd;
 }
 
-.commentsHeader {
-  font-size: 18px;
-  margin-bottom: 8px;
+h4 {
+  margin-bottom: 15px;
+  color: #34036c;
+  font-size: 24px;
 }
 
 .commentList {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .commentItem {
-  margin-bottom: 12px;
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background-color: #f5f5f5;
+  margin-bottom: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
 }
 
 .commentTextarea {
-  width: 100%;
-  resize: vertical;
-  padding: 6px;
-  margin-bottom: 4px;
+  padding: 10px;
   font-size: 14px;
-}
-
-.commentControls {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.commentInput {
-  width: 80%;
-  padding: 6px;
-  margin-top: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  resize: vertical;
+  width: 100%;
 }
 
 .commentButton {
-  background-color: #28a745;
+  align-self: flex-end;
+  background-color: #34036c;
   color: white;
   border: none;
-  padding: 6px 12px;
-  margin-left: 8px;
+  padding: 6px 10px;
+  font-size: 14px;
   border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
 .commentButton:hover {
-  background-color: #218838;
+  background-color: #4a2396;
+}
+
+.commentInputRow {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.commentInputRow input {
+  flex: 1;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.commentInputRow button {
+  padding: 10px 16px;
 }
