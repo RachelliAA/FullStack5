@@ -3,9 +3,11 @@ import { useParams } from "react-router-dom";
 import Comments from "./Comments";
 import classes from "./Posts.module.css";
 
+import { MdDelete, MdAdd, MdSearch } from "react-icons/md";
+
 function Posts() {
   const { userId } = useParams();
-  const activeUserId = parseInt(userId);
+  const activeUserId = userId;
 
   const [posts, setPosts] = useState([]);
   const [search, setSearch] = useState("");
@@ -13,6 +15,8 @@ function Posts() {
   const [selectedPost, setSelectedPost] = useState(null);
   const [newPost, setNewPost] = useState({ title: "", body: "" });
   const [showMineOnly, setShowMineOnly] = useState(true);
+  const [showAddPost, setShowAddPost] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
 
   useEffect(() => {
     fetchPosts();
@@ -55,7 +59,7 @@ function Posts() {
     const nextId = await getNextPostId();
     const post = {
       userId: activeUserId,
-      id: nextId,
+      id: String(nextId),
       title: newPost.title,
       body: newPost.body,
     };
@@ -122,43 +126,65 @@ function Posts() {
 
   return (
     <div className={classes.container}>
+      <div className={classes.iconBar}>
+        <MdAdd
+          className={classes.iconButton}
+          title="Add New Post"
+          onClick={() => setShowAddPost((prev) => !prev)}
+        />
+        <MdSearch
+          className={classes.iconButton}
+          title="Search"
+          onClick={() => setShowSearch((prev) => !prev)}
+        />
+      </div>
+      {showAddPost && (
+        <div className={classes.controls}>
+          <input
+            placeholder="New title"
+            value={newPost.title}
+            onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
+          />
+          <input
+            placeholder="New body"
+            value={newPost.body}
+            onChange={(e) => setNewPost({ ...newPost, body: e.target.value })}
+          />
+          <button onClick={handleAddPost} className={classes.btn}>
+            Add Post
+          </button>
+        </div>
+      )}
+
+      {showSearch && (
+        <div className={classes.searchRow}>
+          <select
+            onChange={(e) => setSearchField(e.target.value)}
+            value={searchField}
+          >
+            <option value="title">Title</option>
+            <option value="id">ID</option>
+          </select>
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search..."
+          />
+          <button onClick={handleSearch} className={classes.btn}>
+            Search
+          </button>
+        </div>
+      )}
+
+
       <h2>Posts for User #{activeUserId}</h2>
 
       <div className={classes.toggleRow}>
         <button onClick={() => setShowMineOnly((prev) => !prev)}>
-          Show: {showMineOnly ? "Mine" : "Everyone's"}
+          Show: {showMineOnly ? "Everyone's" : "Mine"}
         </button>
       </div>
 
-      <div className={classes.controls}>
-        <input
-          placeholder="New title"
-          value={newPost.title}
-          onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}
-        />
-        <input
-          placeholder="New body"
-          value={newPost.body}
-          onChange={(e) => setNewPost({ ...newPost, body: e.target.value })}
-        />
-        <button onClick={handleAddPost}>Add Post</button>
-      </div>
-
-      <div className={classes.searchRow}>
-        <select
-          onChange={(e) => setSearchField(e.target.value)}
-          value={searchField}
-        >
-          <option value="title">Title</option>
-          <option value="id">ID</option>
-        </select>
-        <input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search..."
-        />
-        <button onClick={handleSearch}>Search</button>
-      </div>
 
       <ul className={classes.postList}>
         {posts.map((post) => (
@@ -167,7 +193,11 @@ function Posts() {
             <div>
               <button onClick={() => setSelectedPost(post)}>Select</button>
               {post.userId === activeUserId && (
-                <button onClick={() => handleDeletePost(post.id)}>Delete</button>
+                <MdDelete
+                  onClick={() => handleDeletePost(post.id)}
+                  className={classes.iconButton}
+                  title="Delete Post"
+                />
               )}
             </div>
           </li>
@@ -191,7 +221,9 @@ function Posts() {
             }
           />
           {selectedPost.userId === activeUserId && (
-            <button onClick={handleUpdatePost}>Update Post</button>
+            <button onClick={handleUpdatePost} className={classes.btn}>
+              Update Post
+            </button>
           )}
 
           <Comments

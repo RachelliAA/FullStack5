@@ -42,11 +42,9 @@ function Todos() {
 
     const sorted = [...filteredTodos].sort((a, b) => {
       if (criteria === "title") return a.title.localeCompare(b.title);
-      if (criteria === "completed") return Number(b.completed) - Number(a.completed) ;
+      if (criteria === "completed") return Number(b.completed) - Number(a.completed);
       return a.id - b.id;
     });
-
-    //const sorted = [...todos].sort(...);
 
     setFilteredTodos(sorted);
   };
@@ -76,7 +74,7 @@ function Todos() {
       body: JSON.stringify(updated),
     });
 
-    fetchTodos();
+    await fetchTodos();
   };
 
   const handleDelete = async (id) => {
@@ -84,30 +82,30 @@ function Todos() {
     await fetch(`http://localhost:3000/todos/${id}`, {
       method: "DELETE",
     });
-    fetchTodos();
+    await fetchTodos();
   };
 
   const handleAdd = async () => {
     // Fetch ALL todos to calculate the global max ID
     const res = await fetch("http://localhost:3000/todos");
     const allTodos = await res.json();
-  
+
     const maxId = allTodos.length ? Math.max(...allTodos.map(todo => todo.id)) : 0;
-  
+
     const newTodo = {
       userId: userId,
       id: String(maxId + 1),
       title: "New Todo",
       completed: false
     };
-  
+
     await fetch("http://localhost:3000/todos", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newTodo),
     });
-  
-    fetchTodos();
+
+    await fetchTodos();
   };
 
   const handleUpdateTitle = async (id, title) => {
@@ -121,7 +119,7 @@ function Todos() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updated),
     });
-    fetchTodos();
+    await fetchTodos();
   };
 
   return (
@@ -192,8 +190,8 @@ function Todos() {
             <input
               className={`${classes.todoText} ${todo.completed ? classes.completed : ""}`}
               type="text"
-              defaultValue={todo.title}
-              onBlur={(e) => handleUpdateTitle(todo.id, e.target.value)}
+              value={todo.title}
+              onChange={(e) => handleUpdateTitle(todo.id, e.target.value)}
             />
             <button className={classes.deleteBtn} onClick={() => handleDelete(todo.id)} />
           </li>
