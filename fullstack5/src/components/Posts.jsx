@@ -126,6 +126,8 @@ function Posts() {
 
   return (
     <div className={classes.container}>
+      <h2>Posts for User #{activeUserId}</h2>
+
       <div className={classes.iconBar}>
         <MdAdd
           className={classes.iconButton}
@@ -137,6 +139,16 @@ function Posts() {
           title="Search"
           onClick={() => setShowSearch((prev) => !prev)}
         />
+        <div className={classes.toggleRow}>
+          <select
+            value={showMineOnly ? "mine" : "everyone"}
+            onChange={(e) => setShowMineOnly(e.target.value === "mine")}
+          >
+            <option value="mine">Mine</option>
+            <option value="everyone">Everyone's</option>
+          </select>
+        </div>
+
       </div>
       {showAddPost && (
         <div className={classes.controls}>
@@ -177,28 +189,23 @@ function Posts() {
       )}
 
 
-      <h2>Posts for User #{activeUserId}</h2>
-
-      <div className={classes.toggleRow}>
-        <button onClick={() => setShowMineOnly((prev) => !prev)}>
-          Show: {showMineOnly ? "Everyone's" : "Mine"}
-        </button>
-      </div>
-
 
       <ul className={classes.postList}>
         {posts.map((post) => (
           <li key={post.id} className={classes.postItem}>
-            <strong>{post.id}:</strong> {post.title}
+            <span>ID: {post.id}</span> {post.title}
             <div>
-              <button onClick={() => setSelectedPost(post)}>Select</button>
+              
               {post.userId === activeUserId && (
                 <MdDelete
                   onClick={() => handleDeletePost(post.id)}
                   className={classes.iconButton}
                   title="Delete Post"
+
                 />
               )}
+              <button onClick={() => setSelectedPost(post)}>Select</button>
+              
             </div>
           </li>
         ))}
@@ -212,6 +219,8 @@ function Posts() {
             onChange={(e) =>
               setSelectedPost({ ...selectedPost, title: e.target.value })
             }
+            className={classes.input}
+            placeholder="Post Title"
           />
           <textarea
             rows="4"
@@ -219,6 +228,8 @@ function Posts() {
             onChange={(e) =>
               setSelectedPost({ ...selectedPost, body: e.target.value })
             }
+            className={classes.textarea}
+            placeholder="Post Body"
           />
           {selectedPost.userId === activeUserId && (
             <button onClick={handleUpdatePost} className={classes.btn}>
@@ -226,14 +237,16 @@ function Posts() {
             </button>
           )}
 
+
           <Comments
             postId={selectedPost.id}
             activeUserId={activeUserId}
             showMineOnly={showMineOnly}
           />
         </div>
-      )}
-    </div>
+      )
+      }
+    </div >
   );
 }
 

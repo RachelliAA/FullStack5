@@ -16,10 +16,18 @@ h2 {
 }
 
 .controls {
+  margin-top: 10px;
+  margin-left: 10px;
   display: flex;
-  flex-direction: column;
-  gap: 12px;
-  margin-bottom: 20px;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 15px;
+  background-color: #f8f8ff; /* soft background */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  flex-wrap: wrap;
 }
 
 .controls input,
@@ -50,9 +58,30 @@ h2 {
 
 .searchRow {
   display: flex;
+  align-items: center;
   gap: 10px;
-  margin-bottom: 20px;
+  margin: 10px 0 15px 10px;
+  padding: 10px 15px;
+  background-color: #f8f8ff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   flex-wrap: wrap;
+  max-width: 400px;
+}
+
+.toggleRow {
+  margin: 10px 0 15px 10px;
+  display: flex;
+  align-items: center;
+}
+
+.toggleRow select {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: white;
+  font-size: 14px;
 }
 
 .postList {
@@ -65,8 +94,10 @@ h2 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 0;
+  padding: 10px 0;
   border-bottom: 1px solid #ccc;
+
+  gap: 10px;
 }
 
 .postItem strong {
@@ -89,22 +120,66 @@ h2 {
 }
 
 .selectedPost {
-  border: 2px solid #34036c;
-  border-radius: 8px;
-  padding: 20px;
-  margin-top: 20px;
-  background-color: #f9f7fc;
+  background-color: #f8f8ff; ;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 2px solid #34036c20;
+  margin-top: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .selectedPost h3 {
-  margin-top: 0;
   color: #34036c;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
 }
+
+.input,
+.textarea {
+  width: 95%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  transition: border-color 0.2s ease;
+  font-family: inherit;
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: #34036c;
+  outline: none;
+  box-shadow: 0 0 0 2px #34036c30;
+}
+
+.btn {
+  background-color: #34036c;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: background-color 0.2s ease;
+  display: block;
+  margin: 0 auto;
+}
+
+.btn:hover {
+  background-color: #4c0591;
+}
+
 
 .iconButton {
   font-size: 1.8rem;
   cursor: pointer;
   color: #34036c;
+  align-items: center;
 }
 
 .iconBar {
@@ -121,6 +196,8 @@ h2 {
   gap: 1rem;
   margin: 1rem 0;
 }
+
+
 
 
 

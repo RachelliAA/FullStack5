@@ -18,6 +18,7 @@ function Comments({ postId, activeUserId, showMineOnly }) {
   const fetchUserDetails = async () => {
     const res = await fetch(`http://localhost:3000/users`);
     const data = await res.json();
+    
     const user = data.find((u) => u.id === activeUserId);
     if (user) {
       setUser(user);
@@ -25,8 +26,10 @@ function Comments({ postId, activeUserId, showMineOnly }) {
   };
 
   const fetchComments = async () => {
+    console.log(postId);
     const res = await fetch(`http://localhost:3000/comments?postId=${postId}`);
     const data = await res.json();
+    console.log(data);
     const filtered = showMineOnly
       ? data.filter((c) => c.email === activeUser?.email)
       : data;
@@ -53,8 +56,8 @@ function Comments({ postId, activeUserId, showMineOnly }) {
     const nextId = await getNextCommentId();
 
     const comment = {
-      postId: postId,
-      id: nextId,
+      postId: String(postId),
+      id: String(nextId),
       name: activeUser.name,
       email: activeUser.email,
       body: newComment,
@@ -122,7 +125,7 @@ function Comments({ postId, activeUserId, showMineOnly }) {
               <strong>{comment.name}</strong> ({comment.email})
             </div>
             {comment.email === activeUser?.email && (
-              <div>
+              <div className={classes.commentButtonGroup}>
                 <button
                   className={classes.commentButton}
                   onClick={() => handleUpdateComment(comment.id, comment.email)}

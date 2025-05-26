@@ -2,18 +2,21 @@
   margin-top: 20px;
   padding: 20px;
   border-top: 1px solid #ddd;
+  text-align: center; /* center heading and content */
 }
 
 h4 {
   margin-bottom: 15px;
   color: #34036c;
   font-size: 24px;
+  text-align: center; /* explicitly center heading */
 }
 
 .commentList {
   list-style: none;
   padding: 0;
-  margin: 0;
+  margin: 0 auto; /* center the list */
+  max-width: 600px; /* optional: constrain width for better centering */
 }
 
 .commentItem {
@@ -23,6 +26,9 @@ h4 {
   gap: 8px;
   padding-bottom: 10px;
   border-bottom: 1px solid #eee;
+  align-items: center; /* center comment content */
+  text-align: left; /* keep text left aligned inside comment */
+  max-width: 600px; /* same width as the list */
 }
 
 .commentTextarea {
@@ -32,6 +38,8 @@ h4 {
   border: 1px solid #ccc;
   resize: vertical;
   width: 100%;
+  max-width: 600px;
+  box-sizing: border-box;
 }
 
 .commentButton {
@@ -52,13 +60,22 @@ h4 {
 
 .commentInputRow {
   display: flex;
-  gap: 10px;
+  gap: 15px; /* gap between inputs and buttons */
   margin-top: 20px;
   flex-wrap: wrap;
+  justify-content: flex-start; /* align all items to the left */
+  align-items: center; /* vertically center items */
+}
+
+/* Wrap buttons in a container for better gap control */
+.commentButtonGroup {
+  display: flex;
+  gap: 10px; /* gap between buttons */
 }
 
 .commentInputRow input {
   flex: 1;
+  min-width: 200px; /* ensure input doesn't get too small */
   padding: 10px;
   font-size: 14px;
   border-radius: 6px;
@@ -67,4 +84,15 @@ h4 {
 
 .commentInputRow button {
   padding: 10px 16px;
+  background-color: #34036c;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  white-space: nowrap; /* avoid button text wrapping */
+}
+
+.commentInputRow button:hover {
+  background-color: #4a2396;
 }
