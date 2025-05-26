@@ -12,12 +12,8 @@ function Todos() {
   const [searchField, setSearchField] = useState("title");
 
   const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-  const userId = loggedInUser ? Number(loggedInUser.id) : null;
+  const userId = loggedInUser ? loggedInUser.id : null;
 
-  if (!userId) {
-    alert("No logged-in user found");
-    return;
-  }
 
   const fetchTodos = async () => {
 
@@ -25,12 +21,19 @@ function Todos() {
     const data = await res.json();
 
     const userTodos = data.filter(todo => todo.userId === userId);
+    console.log(data);
+    console.log(userTodos);
 
     setTodos(userTodos);
     setFilteredTodos(userTodos);
   };
 
   useEffect(() => {
+    if (!userId) {
+      alert("No logged-in user found");
+      return;
+    }
+
     fetchTodos();
   }, []);
 
@@ -39,10 +42,12 @@ function Todos() {
 
     const sorted = [...filteredTodos].sort((a, b) => {
       if (criteria === "title") return a.title.localeCompare(b.title);
-      if (criteria === "completed") return b.completed -a.completed;
-      
-      return Number(a.id) - Number(b.id);
+      if (criteria === "completed") return Number(b.completed) - Number(a.completed) ;
+      return a.id - b.id;
     });
+
+    //const sorted = [...todos].sort(...);
+
     setFilteredTodos(sorted);
   };
 
@@ -50,20 +55,22 @@ function Todos() {
     const value = search.toLowerCase();
     const results = todos.filter(todo => {
       if (searchField === "title") return todo.title.toLowerCase().includes(value);
-      if (searchField === "id") return todo.id.toString() === value;
+      if (searchField === "id") return todo.id === value;
+
       if (searchField === "completed") return (value === "true" ? true : false) === todo.completed;
       return true;
     });
     setFilteredTodos(results);
+    setSearch("");
   };
 
   const handleToggle = async (id) => {
-    const todo = todos.find(t => t.id.toString() === id.toString());
+    const todo = todos.find(t => t.id === id);
     if (!todo) return;
 
     const updated = { ...todo, completed: !todo.completed };
 
-    await fetch(`http://localhost:3000/todos/${todo.id}`, {
+    await fetch(`http://localhost:3000/todos/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updated),
@@ -73,6 +80,7 @@ function Todos() {
   };
 
   const handleDelete = async (id) => {
+    console.log("Trying to delete todo with ID:", id);
     await fetch(`http://localhost:3000/todos/${id}`, {
       method: "DELETE",
     });
@@ -80,31 +88,35 @@ function Todos() {
   };
 
   const handleAdd = async () => {
-    const maxId = todos.length ? Math.max(...todos.map(todo => Number(todo.id))) : 0;
-
+    // Fetch ALL todos to calculate the global max ID
+    const res = await fetch("http://localhost:3000/todos");
+    const allTodos = await res.json();
+  
+    const maxId = allTodos.length ? Math.max(...allTodos.map(todo => todo.id)) : 0;
+  
     const newTodo = {
       userId: userId,
-      id: (maxId + 1).toString(),
+      id: String(maxId + 1),
       title: "New Todo",
       completed: false
     };
-
+  
     await fetch("http://localhost:3000/todos", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newTodo),
     });
-
+  
     fetchTodos();
   };
 
   const handleUpdateTitle = async (id, title) => {
-    const todo = todos.find(t => t.id.toString() === id.toString());
+    const todo = todos.find(t => t.id === id);
     if (!todo) return;
 
     const updated = { ...todo, title };
 
-    await fetch(`http://localhost:3000/todos/${todo.id}`, {
+    await fetch(`http://localhost:3000/todos/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updated),
