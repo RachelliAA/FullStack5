@@ -1,5 +1,5 @@
-
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+// src/App.js
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Login from './components/Login';
 import Register from './components/Register';
 import RegisterDetails from './components/RegisterDetails';
@@ -9,11 +9,15 @@ import Posts from "./components/Posts";
 import Albums from './components/Albums';
 import Comments from './components/Comments';
 import Photos from './components/Photos';
+import { UserContext } from './context/UserContext';
 
+function AppWrapper() {
+  const location = useLocation();
+  const match = location.pathname.match(/\/users\/(\d+)/);
+  const userId = match ? match[1] : null;
 
-function App() {
   return (
-    <Router>
+    <UserContext.Provider value={userId}>
       <Routes>
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
@@ -26,17 +30,16 @@ function App() {
         <Route path="/users/:userId/albums" element={<Albums />} />
         <Route path="/users/:userId/albums/:albumId/photos" element={<Photos />} />
       </Routes>
+    </UserContext.Provider>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppWrapper />
     </Router>
-  )
+  );
 }
 
 export default App;
-
-
-
-
-
-//HOW TO RUN:
-//npm run json:server
-//npm run dev
-

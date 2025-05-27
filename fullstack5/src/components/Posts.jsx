@@ -4,11 +4,17 @@ import Comments from "./Comments";
 import classes from "./Posts.module.css";
 
 import { MdDelete, MdAdd, MdSearch } from "react-icons/md";
+import {  useRef } from "react";
+
+import { useUser } from "../context/UserContext";
+
+
+
 
 function Posts() {
-  const { userId } = useParams();
-  const activeUserId = userId;
-
+  //const { userId } = useParams();
+  //const activeUserId = userId;
+  const activeUserId = useUser();
   const [posts, setPosts] = useState([]);
   const [search, setSearch] = useState("");
   const [searchField, setSearchField] = useState("title");
@@ -17,6 +23,14 @@ function Posts() {
   const [showMineOnly, setShowMineOnly] = useState(true);
   const [showAddPost, setShowAddPost] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
+
+  const titleInputRef = useRef();
+
+  useEffect(() => {
+    if (showAddPost && titleInputRef.current) {
+      titleInputRef.current.focus();
+    }
+  }, [showAddPost]);
 
   useEffect(() => {
     fetchPosts();
@@ -143,6 +157,7 @@ function Posts() {
       {showAddPost && (
         <div className={classes.controls}>
           <input
+            ref={titleInputRef}
             placeholder="New title"
             value={newPost.title}
             onChange={(e) => setNewPost({ ...newPost, title: e.target.value })}

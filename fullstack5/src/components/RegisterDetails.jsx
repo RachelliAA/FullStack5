@@ -39,7 +39,7 @@ function RegisterDetails() {
             const users = await res.json();
 
             const maxId = users.reduce((max, user) => Math.max(max, user.id || 0), 0);
-            const nextId = maxId + 1;
+            const nextId = String(maxId + 1);
 
             const newUser = {
                 id: nextId,

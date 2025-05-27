@@ -1,8 +1,8 @@
 // Albums.jsx
 import { useEffect, useState } from "react";
-import Photos from "./Photos";
 import classes from './Albums.module.css';
-import { useParams, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
+import { useUser } from "../context/UserContext";
 
 
 function Albums() {
@@ -17,15 +17,13 @@ function Albums() {
   const [newAlbumTitle, setNewAlbumTitle] = useState("");
 
   // grabbing userId from the URL
-  const { userId } = useParams();
-  //const activeUserId = parseInt(userId);// makes sure userId is a number
-  const activeUserId = userId;
+  const activeUserId = useUser();
   const navigate = useNavigate();
 
   // when component mounts, load the albums
   useEffect(() => {
     // Replace Albums in history with Home
-    window.history.replaceState(null, "", `/users/${userId}/albums`);
+    window.history.replaceState(null, "", `/users/${activeUserId}/albums`);
     fetchAlbums();
   }, []);
 
@@ -150,7 +148,7 @@ function Albums() {
               <li className={classes.albumItem} key={album.id}>
                 <strong>{album.id}:</strong> {album.title}
                 <div className={classes.buttonGroup}>
-                  <button onClick={() => navigate(`/users/${userId}/albums/${album.id}/photos`)}>View Photos</button>
+                  <button onClick={() => navigate(`/users/${activeUserId}/albums/${album.id}/photos`)}>View Photos</button>
                   <button onClick={() => handleDeleteAlbum(album.id)}>Delete</button>
                 </div>
 
